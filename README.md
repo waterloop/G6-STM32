@@ -8,6 +8,5 @@ git submodule update --init --recursive
 ```
 
 ## Branch naming
-Create working branches from develop instead of master and follow these naming conventions:
 - feature / clickupId / ...
 - bugfix / clickupId / ...
