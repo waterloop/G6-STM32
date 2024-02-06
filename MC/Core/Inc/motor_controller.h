@@ -19,8 +19,6 @@ struct GPIO_Pin{
 struct MotorController {
 	CAN_HandleTypeDef* hcan;
 
-	Telemetry_Type* telem;
-
 	DAC_Type* throttle;
 
 	GPIO_Pin* fw_pin;
