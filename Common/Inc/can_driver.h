@@ -16,7 +16,7 @@ typedef struct {
 } CANFrame;
 
 CANFrame CANFrame_init(CAN_HandleTypeDef* handler, uint32_t id);
-HAL_StatusTypeDef send_message(CANFrame self, uint32_t rtr);
+HAL_StatusTypeDef send_message(CANFrame self);
 HAL_StatusTypeDef get_message(CANFrame* self, uint32_t fifo_number);
 uint32_t get_segment(CANFrame self, DataSegment segment);
 uint8_t set_segment(CANFrame* self, DataSegment segment, uint32_t bytes);
