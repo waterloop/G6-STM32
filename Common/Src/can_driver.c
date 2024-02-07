@@ -1,26 +1,25 @@
 #include "can_driver.h"
 
+uint32_t tx_mailbox;
+CAN_TxHeaderTypeDef tx_header = {
+	.IDE = CAN_ID_STD, //only using Standard IDs
+	.RTR = CAN_RTR_DATA, //only sending data frames
+	.DLC = 8, //data length is always the same
+	.TransmitGlobalTime = DISABLE //don't send time-stamp
+};
+
 CANFrame CANFrame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     CANFrame ret = {
         .hcan = handler,
         .id = id,
-        .data = {NULL}
+        .data = {0}
         };
 
     return ret;
 }
 
-HAL_StatusTypeDef send_message(CANFrame self, uint32_t rtr) {
-    uint32_t tx_mailbox;
-    CAN_TxHeaderTypeDef tx_header;
-    tx_header.IDE = CAN_ID_STD;
-    tx_header.StdId = self.id;
-    tx_header.RTR = rtr;
-    tx_header.DLC = 0;
-    while(self.data[tx_header.DLC] != NULL) {
-        tx_header.DLC += 1;
-    }
-    
+HAL_StatusTypeDef send_message(CANFrame self) {
+	tx_header.StdId = self.id;
     return HAL_CAN_AddTxMessage(self.hcan, &tx_header, self.data, &tx_mailbox);
 }
 
