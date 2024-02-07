@@ -4,12 +4,16 @@
 
 #include <stddef.h>
 #include "config.h"
+#define MAX_BYTES 8
 
 typedef struct {
-    uint32_t can_id; // ID of the message 
-    uint8_t start; // starting byte 
-    uint8_t end;  // ending byte
-
-
+    uint32_t id;
+    uint8_t start;
+    uint8_t end;
 } DataSegment;
 
+typedef struct {
+   // CAN_HandleTypeDef* hcan;
+    uint32_t id;
+    uint8_t data[MAX_BYTES];
+} CANFrame;
