@@ -4,6 +4,7 @@
 #define MAX_CAN_PAYLOAD_BTYES    8
 #define BUFF_SIZE 32
 
+// ID Defintions 
 #define MC1     0x10F8109A
 #define MC2     0x10F8108D
 // CAN ARBITRATIONS FOR OTHER ENTITIES
@@ -18,7 +19,7 @@
 // MC1 DEFS 
 const DataSegment DRIVING_DIRECTION = {MC1, 1, 1};
 const DataSegment MOTOR_SPEED = {MC1, 2, 3};
-const DataSegment MOTOR_ERROR_CODE = {MC1, 4, 5}; 
+const DataSegment MOTOR_ERROR_CODE = {MC1, 4, 4}; 
 
 
 //END MC1 DEFS 
@@ -33,18 +34,24 @@ const DataSegment MOTOR_CONTROLLER_TEMP = {MC2, 7, 8};
 //END MC2 DEFS 
 
 // BMS BOARD DEFS
-    // BEGIN DEFS FOR THERMISTOR MESSAGE 
+// BEGIN DEFS FOR THERMISTOR MESSAGE
+const DataSegment MUX1_TEMP = {BMS_TEMP, 1, 1};
+const DataSegment MUX2_TEMP = {BMS_TEMP, 2, 2};
+const DataSegment MUX3_TEMP = {BMS_TEMP, 3, 3};
+const DataSegment MUX4_TEMP = {BMS_TEMP, 4, 4};
+const DataSegment MUX5_TEMP = {BMS_TEMP, 5, 5};
+const DataSegment MUX6_TEMP = {BMS_TEMP, 6, 6};
 
+// END DEFS FOR THERMISTOR MESSAGE
 
-
-
-    // END DEFS FOR THERMISTOR MESSAGE
-
-    // BEGIN DEFS FOR ERROR STATES
-
-
-
-    // END DEFS FOR ERROR STATES
+// BEGIN DEFS FOR ERROR STATES
+const DataSegment MUX1_TEMP_WARN = {BMS_WARN_OVERTEMP, 1, 1};
+const DataSegment MUX2_TEMP_WARN = {BMS_WARN_OVERTEMP, 2, 2};
+const DataSegment MUX3_TEMP_WARN = {BMS_WARN_OVERTEMP, 3, 3};
+const DataSegment MUX4_TEMP_WARN = {BMS_WARN_OVERTEMP, 4, 4};
+const DataSegment MUX5_TEMP_WARN = {BMS_WARN_OVERTEMP, 5, 5};
+const DataSegment MUX6_TEMP_WARN = {BMS_WARN_OVERTEMP, 6, 6};
+// END DEFS FOR ERROR STATES
 
 
 // 
