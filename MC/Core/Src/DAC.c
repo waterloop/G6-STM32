@@ -7,13 +7,16 @@
 
 #include "DAC.h"
 
-void DAC_init(DAC_t* dacInstance, I2C_HandleTypeDef* hi2c)
+DAC_t DAC_init(I2C_HandleTypeDef* hi2c)
 {
-	dacInstance->vref = 5;
-	dacInstance->dac_address = DAC_I2C_WRITE_ADDRESS;
-	dacInstance->high_speed_mode = 0;
-	dacInstance->hi2c = hi2c;
+	DAC_t dacInstance;
+	dacInstance.vref = 5;
+	dacInstance.dac_address = DAC_I2C_WRITE_ADDRESS;
+	dacInstance.high_speed_mode = 0;
+	dacInstance.hi2c = hi2c;
 	reset_dac(dacInstance);
+
+	return dacInstance;
 }
 
 void DAC_write(DAC_t* dacInstance, float voltage)
