@@ -31,7 +31,7 @@ typedef struct {
 } DAC_t;
 
 // Sends a reset command to ensure EEPROM data is available to output
-void DAC_init(DAC_t* dacInstance, I2C_HandleTypeDef* hi2c);
+DAC_t DAC_init(I2C_HandleTypeDef* hi2c);
 
 // Writes to DAC registers only
 void DAC_write(DAC_t* dacInstance, float voltage);
