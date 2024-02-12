@@ -18,7 +18,7 @@
 #define GENERAL_CALL_WAKEUP 0x09U
 #define HIGH_SPEED_MODE 0x0FU
 
-#define MAX_CODE 4096
+#define MAX_CODE 4095
 
 #define DAC_OFFSET 0
 

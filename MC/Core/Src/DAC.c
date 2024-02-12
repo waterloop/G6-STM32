@@ -14,14 +14,16 @@ DAC_t DAC_init(I2C_HandleTypeDef* hi2c)
 	dacInstance.dac_address = DAC_I2C_WRITE_ADDRESS;
 	dacInstance.high_speed_mode = 0;
 	dacInstance.hi2c = hi2c;
-	reset_dac(dacInstance);
+	reset_dac(&dacInstance);
 
 	return dacInstance;
 }
 
 void DAC_write(DAC_t* dacInstance, float voltage)
 {
-	*(dacInstance->buffer) = calculate_code(dacInstance, voltage);
+	uint16_t tempVal = calculate_code(dacInstance, voltage);
+	dacInstance->buffer[0] = tempVal >> 8 & 0xFF;
+	dacInstance->buffer[1] = tempVal & 0xFF;
 	send_command(dacInstance);
 }
 
@@ -61,7 +63,7 @@ static void send_command(DAC_t* dacInstance)
 	address |= (HIGH_SPEED_MODE * dacInstance->high_speed_mode) << 8;
 	HAL_I2C_Master_Transmit(
 			dacInstance->hi2c,
-			dacInstance->dac_address,
+			address,
 			dacInstance->buffer,
 			2,
 			50
