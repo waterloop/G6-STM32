@@ -18,7 +18,7 @@
 // MC1 DEFS 
 const DataSegment DRIVING_DIRECTION = {MC1, 1, 1};
 const DataSegment MOTOR_SPEED = {MC1, 2, 3};
-const DataSegment MOTOR_ERROR_CODE = {MC1, 4, 5}; 
+const DataSegment MOTOR_ERROR_CODE = {MC1, 4, 4}; 
 
 
 //END MC1 DEFS 
