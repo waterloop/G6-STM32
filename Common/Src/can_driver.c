@@ -8,8 +8,8 @@ CAN_TxHeaderTypeDef tx_header = {
 	.TransmitGlobalTime = DISABLE //don't send time-stamp
 };
 
-CANFrame CANFrame_init(CAN_HandleTypeDef* handler, uint32_t id) {
-    CANFrame ret = {
+CAN_Frame_t CAN_Frame_t_init(CAN_HandleTypeDef* handler, uint32_t id) {
+    CAN_Frame_t ret = {
         .hcan = handler,
         .id = id,
         .data = {0}
@@ -18,12 +18,12 @@ CANFrame CANFrame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     return ret;
 }
 
-HAL_StatusTypeDef send_message(CANFrame self) {
+HAL_StatusTypeDef send_message(CAN_Frame_t self) {
 	tx_header.StdId = self.id;
     return HAL_CAN_AddTxMessage(self.hcan, &tx_header, self.data, &tx_mailbox);
 }
 
-HAL_StatusTypeDef get_message(CANFrame* self, uint32_t fifo_number) {
+HAL_StatusTypeDef get_message(CAN_Frame_t* self, uint32_t fifo_number) {
     CAN_RxHeaderTypeDef rx_header;
     HAL_StatusTypeDef ret = HAL_CAN_GetRxMessage(self -> hcan, fifo_number, &rx_header, self -> data);
     if (ret != HAL_OK) {return ret;}
@@ -32,7 +32,7 @@ HAL_StatusTypeDef get_message(CANFrame* self, uint32_t fifo_number) {
     return ret;
 }
 
-uint32_t get_segment(CANFrame self, DataSegment segment) {
+uint32_t get_segment(CAN_Frame_t self, Data_Segment_t segment) {
     if (self.id != segment.id) {
         return 0xFFFFFFFF;
     }
@@ -46,7 +46,7 @@ uint32_t get_segment(CANFrame self, DataSegment segment) {
     return ret;
 }
 
-uint8_t set_segment(CANFrame* self, DataSegment segment, uint32_t data) {
+uint8_t set_segment(CAN_Frame_t* self, Data_Segment_t segment, uint32_t data) {
     if ((self -> id) != segment.id) {
         return 1;
     }
