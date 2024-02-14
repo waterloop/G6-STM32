@@ -11,6 +11,7 @@ typedef struct {
 
 typedef struct {
     CAN_HandleTypeDef* hcan;
+    CAN_TxHeaderTypeDef header;
     uint32_t id;
     uint8_t data[MAX_BYTES];
 } CAN_Frame_t;
