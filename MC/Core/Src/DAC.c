@@ -1,11 +1,11 @@
 /*
- * DAC.c
+ * dac.c
  *
  *  Created on: Feb 6, 2024
  *      Author: Mostafa Hussein
  */
 
-#include "DAC.h"
+#include "dac.h"
 
 DAC_t DAC_init(I2C_HandleTypeDef* hi2c)
 {
