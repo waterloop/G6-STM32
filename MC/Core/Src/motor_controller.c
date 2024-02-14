@@ -55,7 +55,6 @@ uint8_t MC_get_data(Motor_Controller_Data_t* self) {
 	frame_2.header.DLC = 0;
 
 	send_message(frame_1);
-
 	uint8_t recieved = 0;
 	while (!recieved) {
 		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_FILTER_FIFO0)) {
@@ -65,7 +64,6 @@ uint8_t MC_get_data(Motor_Controller_Data_t* self) {
 	}
 
 	send_message(frame_2);
-
 	recieved = 0;
 	while (!recieved) {
 		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_FILTER_FIFO0)) {
