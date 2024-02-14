@@ -25,9 +25,9 @@ typedef struct {
 
 typedef struct {
 	CAN_HandleTypeDef* hcan;
-	uint16_t direction;
+	uint8_t direction;
 	uint16_t speed;
-	uint16_t error_code;
+	uint8_t error_code;
 	uint16_t voltage;
 	uint16_t current;
 	uint16_t temp;

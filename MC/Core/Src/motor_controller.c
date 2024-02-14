@@ -5,7 +5,6 @@
  *  Author: Mahir Mahota
  */
 
-#include <string.h>
 #include "motor_controller.h"
 
 Motor_Controller_t MC_init(CAN_HandleTypeDef* handler) {
@@ -49,12 +48,38 @@ void MC_set_throttle(float throttle) {
 }
 
 uint8_t MC_get_data(Motor_Controller_Data_t* self) {
-	uint8_t retval = 0;
 
-	CAN_Frame_t frame = CAN_init(self -> hcan, MOTOR_CONTROLLER_1);
+	CAN_Frame_t frame_1 = CAN_init(self->hcan, MOTOR_CONTROLLER_1);
+	CAN_Frame_t frame_2 = CAN_init(self->hcan, MOTOR_CONTROLLER_2);
+	frame_1.header.DLC = 0;
+	frame_2.header.DLC = 0;
 
+	send_message(frame_1);
 
-	memset(frame.data, 0, (sizeof(uint8_t) * MAX_CAN_BYTES));
+	uint8_t recieved = 0;
+	while (!recieved) {
+		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_FILTER_FIFO0)) {
+			get_message(frame_1);
+			recieved = 1;
+		}
+	}
+
+	send_message(frame_2);
+
+	recieved = 0;
+	while (!recieved) {
+		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_FILTER_FIFO0)) {
+			get_message(frame_2);
+			recieved = 1;
+		}
+	}
+
+	self->direction = (get_segment(frame_1, DRIVING_DIRECTION) >> 6);
+	self->speed = get_segment(frame_1, MOTOR_SPEED);
+	self->error_code = get_segment(frame_1, MOTOR_ERROR_CODE);
+	self->voltage = get_segment(frame_2, BATTERY_VOLTAGE);
+	self->current = get_segment(frame_2, BATTERY_CURRENT);
+	self->temp = get_segment(frame_2, MOTOR_CONTROLLER_TEMP);
 }
 
 static float get_voltage(float throttle) {
