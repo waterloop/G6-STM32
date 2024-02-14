@@ -1,7 +1,5 @@
 #include "can_driver.h"
 
-uint32_t tx_mailbox;
-
 CAN_Frame_t CAN_Frame_t_init(CAN_HandleTypeDef* handler, uint32_t id) {
     CAN_Frame_t ret = {
         .hcan = handler,
@@ -16,18 +14,20 @@ CAN_Frame_t CAN_Frame_t_init(CAN_HandleTypeDef* handler, uint32_t id) {
     return ret;
 }
 
-HAL_StatusTypeDef send_message(CAN_Frame_t self) {
+void send_message(CAN_Frame_t self) {
 	self.header.StdId = self.id;
-    return HAL_CAN_AddTxMessage(self.hcan, &(self.header), self.data, &tx_mailbox);
+    if (HAL_CAN_AddTxMessage(self.hcan, &(self.header), self.data, &tx_mailbox) != HAL_OK) {
+        Error_Handler();
+    }
 }
 
-HAL_StatusTypeDef get_message(CAN_Frame_t* self, uint32_t fifo_number) {
+void get_message(CAN_Frame_t* self, uint32_t fifo_number) {
     CAN_RxHeaderTypeDef rx_header;
-    HAL_StatusTypeDef ret = HAL_CAN_GetRxMessage(self -> hcan, fifo_number, &rx_header, self -> data);
-    if (ret != HAL_OK) {return ret;}
+    if (HAL_CAN_GetRxMessage(self -> hcan, fifo_number, &rx_header, self -> data) != HAL_OK) {
+        Error_Handler();
+    }
 
     self -> id = rx_header.StdId;
-    return ret;
 }
 
 uint32_t get_segment(CAN_Frame_t self, Data_Segment_t segment) {
