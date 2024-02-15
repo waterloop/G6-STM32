@@ -1,12 +1,12 @@
 #include "can_driver.h"
 
-CAN_Frame_t CAN_Frame_t_init(CAN_HandleTypeDef* handler, uint32_t id) {
+CAN_Frame_t CAN_Frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     CAN_Frame_t ret = {
         .hcan = handler,
-        .header.IDE = CAN_ID_STD,
-        .header.RTR = CAN_RTR_DATA,
-        .header.DLC = 8,
-        .header.TransmitGlobalTime = DISABLE,
+        .id_type = CAN_ID_STD,
+        .rtr = CAN_RTR_DATA,
+        .data_length = 8,
+        .time_stamp = 0,
         .id = id,
         .data = {0}
         };
@@ -15,19 +15,41 @@ CAN_Frame_t CAN_Frame_t_init(CAN_HandleTypeDef* handler, uint32_t id) {
 }
 
 void send_message(CAN_Frame_t self) {
-	self.header.StdId = self.id;
-    if (HAL_CAN_AddTxMessage(self.hcan, &(self.header), self.data, &tx_mailbox) != HAL_OK) {
+    CAN_RxHeaderTypeDef tx_header = {
+        .IDE = self.id_type,
+        .RTR = self.rtr,
+        .DLC = self.data_length,
+        .StdId = self.id,
+        .ExtId = self.id,
+        .TransmitGlobalTime = DISABLE
+    };
+
+    if (HAL_CAN_AddTxMessage(self.hcan, &tx_header, self.data, &tx_mailbox) != HAL_OK) {
         Error_Handler();
     }
 }
 
-void get_message(CAN_Frame_t* self, uint32_t fifo_number) {
+CAN_Frame_t get_message(CAN_HandleTypeDef* handler, uint32_t fifo_number) {
+    CAN_Frame_t ret = CAN_frame_init(handler, 0xFFFFFFFF);
+
     CAN_RxHeaderTypeDef rx_header;
-    if (HAL_CAN_GetRxMessage(self -> hcan, fifo_number, &rx_header, self -> data) != HAL_OK) {
+    if (HAL_CAN_GetRxMessage(handler, fifo_number, &rx_header, ret.data) != HAL_OK) {
         Error_Handler();
     }
-
-    self -> id = rx_header.StdId;
+    
+    ret = {
+        .id_type = rx_header.IDE,
+        .rtr = rx_header.RTR,
+        .data_length = rx_header.DLC,
+        .time_stamp = rx_header.Timestamp
+    }
+    if (rx_header.IDE == CAN_ID_STD) {
+        ret.id = rx_header.StdId;
+    } else {
+        ret.id = rx_header.ExtId;
+    }
+    
+    return ret;
 }
 
 uint32_t get_segment(CAN_Frame_t self, Data_Segment_t segment) {
