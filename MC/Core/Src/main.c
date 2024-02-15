@@ -90,7 +90,30 @@ int main(void)
   MX_I2C2_Init();
   MX_CAN3_Init();
   /* USER CODE BEGIN 2 */
+  CAN_FilterTypeDef filter_config;
 
+  filter_config.FilterActivation = CAN_FILTER_ENABLE;
+  filter_config.FilterScale = CAN_FILTERSCALE_32BIT;
+  filter_config.FilterMode = CAN_FILTERMODE_IDLIST;
+  filter_config.FilterBank = 0;
+
+  filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+  filter_config.FilterIdHigh = 0x10F8109A >> 13;
+  filter_config.FilterIdLow = 0x10F8109A << 16;
+  filter_config.FilterMaskIdHigh = 0x10F8108D >> 13;
+  filter_config.FilterMaskIdLow = 0x10F8108D << 16;
+
+  HAL_CAN_ConfigFilter(&hcan3, &filter_config);
+
+  filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO1;
+  filter_config.FilterIdHigh = 0;
+  filter_config.FilterIdLow = 0;
+  filter_config.FilterMaskIdHigh = 0;
+  filter_config.FilterMaskIdLow = 0;
+
+  HAL_CAN_ConfigFilter(&hcan3, &filter_config);
+
+  Motor_Controller_Data_t data_struct = MC_init(&hcan3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
