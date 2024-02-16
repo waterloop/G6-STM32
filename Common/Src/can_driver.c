@@ -1,6 +1,6 @@
 #include "can_driver.h"
 
-CAN_Frame_t CAN_Frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
+CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     CAN_Frame_t ret = {
         .hcan = handler,
         .id_type = CAN_ID_STD,
@@ -14,7 +14,7 @@ CAN_Frame_t CAN_Frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     return ret;
 }
 
-void send_message(CAN_Frame_t self) {
+void CAN_send_frame(CAN_Frame_t self) {
     CAN_RxHeaderTypeDef tx_header = {
         .IDE = self.id_type,
         .RTR = self.rtr,
@@ -29,7 +29,7 @@ void send_message(CAN_Frame_t self) {
     }
 }
 
-CAN_Frame_t get_message(CAN_HandleTypeDef* handler, uint32_t fifo_number) {
+CAN_Frame_t CAN_get_frame(CAN_HandleTypeDef* handler, uint32_t fifo_number) {
     CAN_Frame_t ret = CAN_frame_init(handler, 0xFFFFFFFF);
 
     CAN_RxHeaderTypeDef rx_header;
@@ -52,7 +52,7 @@ CAN_Frame_t get_message(CAN_HandleTypeDef* handler, uint32_t fifo_number) {
     return ret;
 }
 
-uint32_t get_segment(CAN_Frame_t self, Data_Segment_t segment) {
+uint32_t CAN_get_segment(CAN_Frame_t self, Data_Segment_t segment) {
     if (self.id != segment.id) {
         return 0xFFFFFFFF;
     }
@@ -66,7 +66,7 @@ uint32_t get_segment(CAN_Frame_t self, Data_Segment_t segment) {
     return ret;
 }
 
-uint8_t set_segment(CAN_Frame_t* self, Data_Segment_t segment, uint32_t data) {
+uint8_t CAN_set_segment(CAN_Frame_t* self, Data_Segment_t segment, uint32_t data) {
     if ((self -> id) != segment.id) {
         return 1;
     }
