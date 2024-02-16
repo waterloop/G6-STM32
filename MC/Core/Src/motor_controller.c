@@ -47,27 +47,29 @@ void MC_set_throttle(float throttle) {
 	DAC_write(throttle, get_voltage(throttle));
 }
 
-uint8_t MC_get_data(Motor_Controller_Data_t* self) {
+void MC_get_data(Motor_Controller_Data_t* self) {
 
 	CAN_Frame_t frame_1 = CAN_init(self->hcan, MOTOR_CONTROLLER_1);
 	CAN_Frame_t frame_2 = CAN_init(self->hcan, MOTOR_CONTROLLER_2);
-	frame_1.header.DLC = 0;
-	frame_2.header.DLC = 0;
+	frame_1.id_type = CAN_ID_EXT;
+	frame_1.data_length = 0;
+	frame_2.id_type = CAN_ID_EXT;
+	frame_2.data_length = 0;
 
-	send_message(frame_1);
+	CAN_send_frame(frame_1);
 	uint8_t recieved = 0;
 	while (!recieved) {
-		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_FILTER_FIFO0)) {
-			get_message(frame_1);
+		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_RX_FIFO0)) {
+			CAN_get_frame(frame_1);
 			recieved = 1;
 		}
 	}
 
-	send_message(frame_2);
+	CAN_send_frame(frame_2);
 	recieved = 0;
 	while (!recieved) {
-		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_FILTER_FIFO0)) {
-			get_message(frame_2);
+		if (HAL_CAN_GetRxFifoFillLevel(self->hcan, CAN_RX_FIFO0)) {
+			CAN_get_frame(frame_2);
 			recieved = 1;
 		}
 	}

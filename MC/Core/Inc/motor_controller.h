@@ -38,7 +38,8 @@ void MC_stop(void);
 void MC_drive(void);
 void MC_change_direction(void);
 void MC_set_throttle(float throttle);
-uint8_t MC_get_data(Motor_Controller_Data_t* self);
+void MC_get_data(Motor_Controller_Data_t* self);
+void MC_execute_command(CAN_Frame_t frame);
 
 static float get_voltage(float throttle);
 

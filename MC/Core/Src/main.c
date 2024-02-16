@@ -21,6 +21,7 @@
 #include "can.h"
 #include "i2c.h"
 #include "gpio.h"
+#include "motor_controller.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -90,36 +91,28 @@ int main(void)
   MX_I2C2_Init();
   MX_CAN3_Init();
   /* USER CODE BEGIN 2 */
-  CAN_FilterTypeDef filter_config;
-
-  filter_config.FilterActivation = CAN_FILTER_ENABLE;
-  filter_config.FilterScale = CAN_FILTERSCALE_32BIT;
-  filter_config.FilterMode = CAN_FILTERMODE_IDLIST;
-  filter_config.FilterBank = 0;
-
-  filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO0;
-  filter_config.FilterIdHigh = 0x10F8109A >> 13;
-  filter_config.FilterIdLow = 0x10F8109A << 16;
-  filter_config.FilterMaskIdHigh = 0x10F8108D >> 13;
-  filter_config.FilterMaskIdLow = 0x10F8108D << 16;
-
-  HAL_CAN_ConfigFilter(&hcan3, &filter_config);
-
-  filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO1;
-  filter_config.FilterIdHigh = 0;
-  filter_config.FilterIdLow = 0;
-  filter_config.FilterMaskIdHigh = 0;
-  filter_config.FilterMaskIdLow = 0;
-
-  HAL_CAN_ConfigFilter(&hcan3, &filter_config);
+  HAL_CAN_Start(&hcan3);
 
   Motor_Controller_Data_t data_struct = MC_init(&hcan3);
+  CAN_Frame_t tx_frame = CAN_init(&hcan3, 0xFFFFFFFF);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	while (HAL_CAN_GetRxFifoFillLevel(&hcan3, CAN_RX_FIFO1)) {
+		MC_execute_command(CAN_get_frame(&hcan3, CAN_RX_FIFO1));
+	}
+
+	if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
+		MC_get_data(&data_struct);
+	}
+
+	//build tx_frame here
+
+	CAN_send_frame(tx_frame);
+	HAL_Delay(50);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
