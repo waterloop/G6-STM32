@@ -83,5 +83,5 @@ void MC_get_data(Motor_Controller_Data_t* self) {
 }
 
 static float get_voltage(float throttle) {
-
+  return throttle/100.0 * 5;
 }
