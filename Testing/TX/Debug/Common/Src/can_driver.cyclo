@@ -1,0 +1,5 @@
+C:/Users/mahir/Desktop/Waterloop/G6-STM32/Common/Src/can_driver.c:5:13:CAN_frame_init	1
+C:/Users/mahir/Desktop/Waterloop/G6-STM32/Common/Src/can_driver.c:19:6:CAN_send_frame	2
+C:/Users/mahir/Desktop/Waterloop/G6-STM32/Common/Src/can_driver.c:34:13:CAN_get_frame	3
+C:/Users/mahir/Desktop/Waterloop/G6-STM32/Common/Src/can_driver.c:56:10:CAN_get_segment	3
+C:/Users/mahir/Desktop/Waterloop/G6-STM32/Common/Src/can_driver.c:70:9:CAN_set_segment	3
