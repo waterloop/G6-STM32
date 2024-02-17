@@ -2,7 +2,6 @@
 #include <stdint.h>
 
 #define MAX_BYTES 8
-uint32_t tx_mailbox;
 
 typedef struct {
     uint32_t id;
