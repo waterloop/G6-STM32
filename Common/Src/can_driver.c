@@ -1,4 +1,7 @@
 #include "can_driver.h"
+#include "main.h"
+
+uint32_t tx_mailbox;
 
 CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     CAN_Frame_t ret = {
@@ -37,12 +40,11 @@ CAN_Frame_t CAN_get_frame(CAN_HandleTypeDef* handler, uint32_t fifo_number) {
         Error_Handler();
     }
     
-    ret = {
-        .id_type = rx_header.IDE,
-        .rtr = rx_header.RTR,
-        .data_length = rx_header.DLC,
-        .time_stamp = rx_header.Timestamp
-    }
+    ret.id_type = rx_header.IDE;
+    ret.rtr = rx_header.RTR;
+    ret.data_length = rx_header.DLC;
+    ret.time_stamp = rx_header.Timestamp;
+
     if (rx_header.IDE == CAN_ID_STD) {
         ret.id = rx_header.StdId;
     } else {
