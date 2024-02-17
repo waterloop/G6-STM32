@@ -1,5 +1,4 @@
 #include "can_driver.h"
-#include "main.h"
 
 uint32_t tx_mailbox;
 
@@ -18,7 +17,7 @@ CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
 }
 
 void CAN_send_frame(CAN_Frame_t self) {
-    CAN_RxHeaderTypeDef tx_header = {
+    CAN_TxHeaderTypeDef tx_header = {
         .IDE = self.id_type,
         .RTR = self.rtr,
         .DLC = self.data_length,
