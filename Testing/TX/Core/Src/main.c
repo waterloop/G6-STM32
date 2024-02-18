@@ -101,9 +101,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  CAN_send_frame(tx_frame);
+	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
+		  CAN_send_frame(tx_frame);
+	  }
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-	  HAL_Delay(1000);
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
