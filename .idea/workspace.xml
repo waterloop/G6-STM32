@@ -12,10 +12,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83a1cd7a-987c-40b5-878f-800ef2001b2e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Common/Inc/circ_buff.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Common/Src/circ_buff.c" afterDir="false" />
-    </list>
+    <list default="true" id="83a1cd7a-987c-40b5-878f-800ef2001b2e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,6 +59,7 @@
       <updated>1707613509050</updated>
       <workItem from="1707613512347" duration="6279000" />
       <workItem from="1707623890498" duration="1334000" />
+      <workItem from="1708084854622" duration="290000" />
     </task>
     <servers />
   </component>
