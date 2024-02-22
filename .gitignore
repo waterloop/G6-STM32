@@ -3,7 +3,8 @@ bin
 temp
 */Debug/
 .DS_Store
-.vscode
+.vscode/
+.idea/
 .cache
 
 .settings
