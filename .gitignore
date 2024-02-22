@@ -1,1 +1,10 @@
+build
+bin
+temp
+*/Debug/
+.DS_Store
+.vscode
+.cache
 
+.settings
+.metadata
