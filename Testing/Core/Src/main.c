@@ -66,6 +66,7 @@ static void MX_CAN3_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	#define TX
 
   /* USER CODE END 1 */
 
@@ -93,7 +94,8 @@ int main(void)
 
   Data_Segment_t test_segment = {0x42, 1, 2};
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, 0x42);
-  CAN_set_segment(&tx_frame, test_segment, 0x4242);
+  CAN_Frame_T rx_frame;
+  CAN_set_segment(&tx_frame, test_segment, 0x4224);
 
   /* USER CODE END 2 */
 
@@ -101,10 +103,21 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
-		  CAN_send_frame(tx_frame);
-	  }
+	#ifdef TX
+	  CAN_send_frame(tx_frame);
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+	#endif
+
+	#ifdef RX
+	  if(HAL_CAN_GetRxFifoFillLevel(hcan3, CAN_RX_FIFO0)) {
+		  rx_frame = CAN_get_frame(&hcan3, CAN_RX_FIFO0);
+	  }
+
+	  if (CAN_get_segment(rx_frame, test_segment) == 0x4224) {
+		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+	  }
+	#endif
+
 	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
