@@ -54,7 +54,7 @@ CAN_Frame_t CAN_get_frame(CAN_HandleTypeDef* handler, uint32_t fifo_number) {
 }
 
 uint32_t CAN_get_segment(CAN_Frame_t self, Data_Segment_t segment) {
-    if (self.id != segment.id) {
+    if ((self.id != segment.id) && ((self.id << WARN_OFFSET) != segment.id)) {
         return 0xFFFFFFFF;
     }
 
@@ -68,7 +68,7 @@ uint32_t CAN_get_segment(CAN_Frame_t self, Data_Segment_t segment) {
 }
 
 uint8_t CAN_set_segment(CAN_Frame_t* self, Data_Segment_t segment, uint32_t data) {
-    if ((self -> id) != segment.id) {
+    if ((self->id != segment.id) && ((self->id << WARN_OFFSET) != segment.id)) {
         return 1;
     }
 
