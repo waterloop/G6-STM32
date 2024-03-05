@@ -63,9 +63,9 @@ void MX_CAN3_Init(void)
 
   filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO0;
   filter_config.FilterIdHigh = 0x10F8109A >> 13;
-  filter_config.FilterIdLow = 0x10F8109A << 16;
+  filter_config.FilterIdLow = 0x10F8109A << 3;
   filter_config.FilterMaskIdHigh = 0x10F8108D >> 13;
-  filter_config.FilterMaskIdLow = 0x10F8108D << 16;
+  filter_config.FilterMaskIdLow = 0x10F8108D << 3;
   HAL_CAN_ConfigFilter(&hcan3, &filter_config);
 
   filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO1;
