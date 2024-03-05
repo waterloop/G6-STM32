@@ -66,7 +66,7 @@ static void MX_CAN3_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	#define TX
+	#define RX
 
   /* USER CODE END 1 */
 
@@ -92,9 +92,23 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
 
+  CAN_FilterTypeDef filter_config;
+
+  filter_config.FilterActivation = CAN_FILTER_ENABLE;
+  filter_config.FilterScale = CAN_FILTERSCALE_32BIT;
+  filter_config.FilterMode = CAN_FILTERMODE_IDLIST;
+  filter_config.FilterBank = 0;
+
+  filter_config.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+  filter_config.FilterIdHigh = 0x42 << 5;
+  filter_config.FilterIdLow = 0x00;
+  filter_config.FilterMaskIdHigh = 0x42 << 5;
+  filter_config.FilterMaskIdLow = 0x00;
+  HAL_CAN_ConfigFilter(&hcan3, &filter_config);
+
   Data_Segment_t test_segment = {0x42, 1, 2};
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, 0x42);
-  CAN_Frame_T rx_frame;
+  CAN_Frame_t rx_frame;
   CAN_set_segment(&tx_frame, test_segment, 0x4224);
 
   /* USER CODE END 2 */
@@ -109,7 +123,7 @@ int main(void)
 	#endif
 
 	#ifdef RX
-	  if(HAL_CAN_GetRxFifoFillLevel(hcan3, CAN_RX_FIFO0)) {
+	  if(HAL_CAN_GetRxFifoFillLevel(&hcan3, CAN_RX_FIFO0)) {
 		  rx_frame = CAN_get_frame(&hcan3, CAN_RX_FIFO0);
 	  }
 
