@@ -1,0 +1,24 @@
+#include "temp_sensing.h"
+
+
+//Not sure how much initialize the HAL will handle.
+//We might need this, might not.
+int system_init()
+{
+	HAL_ADC_Start(&hadc3);
+	HAL_ADC_PollForConversion(&hadc3, HAL_MAX_DELAY);
+	//Should test this delay.
+	HAL_DELAY(500);
+}
+
+
+int measure_temp(struct data)
+{
+	for(int i=0U; i<NUM_THERM_PER_MUX; i++)
+	{
+		//Code for setting control lines.
+
+		//Code for reading thermistor value.
+
+	}
+}

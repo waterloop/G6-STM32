@@ -1,8 +1,21 @@
-/*
- * temp_sensing.c
- *
- *  Created on: Feb 13, 2024
- *      Author: quinn
- */
+#include "temp_sensing.h"
 
 
+//Not sure how much initialize the HAL will handle.
+//We might need this, might not.
+int system_init()
+{
+
+}
+
+//function input is the thermistor data for each MUX
+int measure_temp(uint32_t data[NUM_MUX])
+{
+	for(int i=0U; i<NUM_THERM_PER_MUX; i++)
+	{
+		//Code for setting control lines.
+
+		//Code for reading thermistor value.
+
+	}
+}
