@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "temp_sensing.c"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,6 +62,7 @@ ETH_TxPacketConfig TxConfig;
 
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc3;
+DMA_HandleTypeDef hdma_adc3;
 
 CAN_HandleTypeDef hcan1;
 
@@ -78,11 +79,12 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_ETH_Init(void);
+static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_ADC3_Init(void);
+static void MX_ETH_Init(void);
 static void MX_CAN1_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -90,7 +92,7 @@ static void MX_CAN1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint_32t values[NUM_MUX];
 /* USER CODE END 0 */
 
 /**
@@ -121,14 +123,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ETH_Init();
+  MX_DMA_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_ADC1_Init();
   MX_ADC3_Init();
+  MX_ETH_Init();
   MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_ADC_Start_DMA(&hadc3, values, NUM_MUX);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -274,13 +277,13 @@ static void MX_ADC3_Init(void)
   hadc3.Instance = ADC3;
   hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc3.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc3.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc3.Init.ContinuousConvMode = DISABLE;
+  hadc3.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  hadc3.Init.ContinuousConvMode = ENABLE;
   hadc3.Init.DiscontinuousConvMode = DISABLE;
   hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc3.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc3.Init.NbrOfConversion = 1;
+  hadc3.Init.NbrOfConversion = 6;
   hadc3.Init.DMAContinuousRequests = DISABLE;
   hadc3.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc3) != HAL_OK)
@@ -293,6 +296,51 @@ static void MX_ADC3_Init(void)
   sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_5;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_6;
+  sConfig.Rank = ADC_REGULAR_RANK_4;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_7;
+  sConfig.Rank = ADC_REGULAR_RANK_5;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Rank = ADC_REGULAR_RANK_6;
   if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -456,6 +504,22 @@ static void MX_USB_OTG_FS_PCD_Init(void)
   /* USER CODE BEGIN USB_OTG_FS_Init 2 */
 
   /* USER CODE END USB_OTG_FS_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
 
