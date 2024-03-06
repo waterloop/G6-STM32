@@ -1,5 +1,11 @@
 #pragma once
 
+
+
+
+
+
+
 #include "can_driver.h"
 #define MAX_CAN_PAYLOAD_BTYES    8
 #define BUFF_SIZE 32
@@ -11,7 +17,7 @@
 #define MOTOR_CONTROLLER_2     0x10F8108D
 //BMS
 #define BMS_TEMP             0x10
-#define BMS_WARN_OVERTEMP    0x06
+#define BMS_WARN_OVERTEMP    BMS_TEMP - WARN_OFFSET
 //SENSORS
 #define SENSOR_BOARD         0x10 // temp
 #define SENSOR_BOARD_WARN     SENSOR_BOARD - WARN_OFFSET
@@ -38,16 +44,6 @@ const DataSegment MUX4_TEMP = {BMS_TEMP, 4, 4};
 const DataSegment MUX5_TEMP = {BMS_TEMP, 5, 5};
 const DataSegment MUX6_TEMP = {BMS_TEMP, 6, 6};
 // END DEFS FOR THERMISTOR MESSAGE
-
-// BEGIN DEFS FOR ERROR STATES
-const DataSegment MUX1_TEMP_WARN = {BMS_WARN_OVERTEMP, 1, 1};
-const DataSegment MUX2_TEMP_WARN = {BMS_WARN_OVERTEMP, 2, 2};
-const DataSegment MUX3_TEMP_WARN = {BMS_WARN_OVERTEMP, 3, 3};
-const DataSegment MUX4_TEMP_WARN = {BMS_WARN_OVERTEMP, 4, 4};
-const DataSegment MUX5_TEMP_WARN = {BMS_WARN_OVERTEMP, 5, 5};
-const DataSegment MUX6_TEMP_WARN = {BMS_WARN_OVERTEMP, 6, 6};
-// END DEFS FOR ERROR STATES
-// END BMS DEFS
 
 // BEGIN SENSORS BOARD DEFS
 const DataSegment PRESSURE_SENSOR_DATA = {SENSOR_BOARD_PRIORITY, 1, 1}; 
