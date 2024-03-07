@@ -1,0 +1,16 @@
+#include <stdint.h>
+#include "stm32f7xx_hal_gpio.h"
+
+#define NUM_MUX 6U //Note: the number of multiplexors must also be changed in the ADC3 configuration
+#define NUM_THERM_PER_MUX 8U
+
+#define NUM_SAMPLES 50U
+
+typedef struct{
+	uint8_t size;
+	uint16_t data[NUM_MUX][NUM_SAMPLES];
+	uint16_t data_mean[NUM_MUX];
+};
+
+int system_init();
+int measure_temp(uint32_t adc_data[NUM_MUX]);
