@@ -1,14 +1,13 @@
+#pragma once
+
+#include <stdint.h>
+#include "main.h"
 
 #define NUM_MUX 6U //Note: the number of multiplexors must also be changed in the ADC3 configuration
 #define NUM_THERM_PER_MUX 8U
 
 #define NUM_SAMPLES 50U
 
-typedef struct{
-	uint_8t size;
-	uint_16t data[NUM_MUX][NUM_SAMPLES];
-	uint_16t data_mean[NUM_MUX];
-};
+int system_init(void);
+int measure_temp(uint32_t adc_data[NUM_MUX]);
 
-int system_init();
-int measure_temp(uint32_t data[NUM_MUX]);
