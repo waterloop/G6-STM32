@@ -1,2 +1,2 @@
-../Core/Src/temp_sensing.c:6:5:system_init	1
-../Core/Src/temp_sensing.c:13:5:measure_temp	3
+../Core/Src/temp_sensing.c:8:6:enqueue	2
+../Core/Src/temp_sensing.c:20:6:measure_temp	3

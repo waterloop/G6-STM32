@@ -92,7 +92,8 @@ static void MX_CAN3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint32_t values[NUM_MUX];
+uint32_t adc_data[NUM_MUX];
+uint32_t temp_data[NUM_SAMPLES][NUM_MUX];
 /* USER CODE END 0 */
 
 /**
@@ -131,7 +132,7 @@ int main(void)
   MX_ETH_Init();
   MX_CAN3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start_DMA(&hadc3, values, NUM_MUX);
+  HAL_ADC_Start_DMA(&hadc3, adc_data, NUM_MUX);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -141,6 +142,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  measure_temp(adc_data, temp_data);
+	  //Code for averaging temperature/preparing data for transmission
+	  //Code for sending CAN message
+	  HAL_Delay(SAMPLE_DELAY);
   }
   /* USER CODE END 3 */
 }
