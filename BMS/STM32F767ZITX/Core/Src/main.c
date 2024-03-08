@@ -93,7 +93,8 @@ static void MX_CAN3_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint32_t adc_data[NUM_MUX];
-uint32_t temp_data[NUM_SAMPLES][NUM_MUX];
+uint32_t average_mux_temp[NUM_MUX] = {0};
+uint32_t temp_data[NUM_SAMPLES][NUM_MUX] = {0};
 /* USER CODE END 0 */
 
 /**
@@ -142,7 +143,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  measure_temp(adc_data, temp_data);
+	  measure_temp(average_mux_temp, adc_data, temp_data);
 	  //Code for averaging temperature/preparing data for transmission
 	  //Code for sending CAN message
 	  HAL_Delay(SAMPLE_DELAY);
