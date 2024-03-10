@@ -11,7 +11,7 @@
 #include "i2c.h"
 #include "math.h"
 
-#define DAC_I2C_WRITE_ADDRESS 0x61U
+#define DAC_I2C_WRITE_ADDRESS 0x62U
 
 #define GENERAL_CALL_ADDRESS 0x00U
 #define GENERAL_CALL_RESET 0x06U
