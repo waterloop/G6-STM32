@@ -63,7 +63,7 @@ static void send_command(DAC_t* dacInstance)
 	address |= (HIGH_SPEED_MODE * dacInstance->high_speed_mode) << 8;
 	HAL_I2C_Master_Transmit(
 			dacInstance->hi2c,
-			address,
+			address<<1,
 			dacInstance->buffer,
 			2,
 			50
