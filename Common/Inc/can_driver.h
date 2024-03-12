@@ -11,13 +11,13 @@ typedef struct {
 } Data_Segment_t;
 
 typedef struct {
-    CAN_HandleTypeDef* hcan;
-    uint32_t id_type;
-    uint32_t rtr;
-    uint32_t data_length;
-    uint32_t time_stamp;
-    uint32_t id;
-    uint8_t data[MAX_BYTES];
+    CAN_HandleTypeDef* hcan;    // CAN handler (hcan1, hcan2 or hcan3)
+    uint32_t id_type;           // CAN_ID_STD or CAN_ID_EXT
+    uint32_t rtr;               // CAN_RTR_DATA or CAN_RTR_REMOTE
+    uint32_t data_length;       // 0 - MAX_BYTES
+    uint32_t time_stamp;        // time stamp returned in rx header
+    uint32_t id;                // message ID
+    uint8_t data[MAX_BYTES];    // message data
 } CAN_Frame_t;
 
 CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id);
