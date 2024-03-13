@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-#include "main.h"
+#include "can.h"
 
 #define MAX_BYTES 8
 
