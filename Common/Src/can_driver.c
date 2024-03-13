@@ -1,6 +1,6 @@
 #include "can_driver.h"
 
-uint32_t tx_mailbox;
+static uint32_t tx_mailbox;
 
 CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     // default conditions
@@ -8,7 +8,7 @@ CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
         .hcan = handler,
         .id_type = CAN_ID_STD,
         .rtr = CAN_RTR_DATA,
-        .data_length = 8,
+        .data_length = MAX_BYTES,
         .time_stamp = 0,
         .id = id,
         .data = {0}
@@ -61,8 +61,8 @@ uint32_t CAN_get_segment(CAN_Frame_t self, Data_Segment_t segment) {
     }
 
     uint32_t ret = 0;
-    uint8_t length = segment.end - segment.start; // segment numbering is 1-based indexing
-    for(uint8_t i = 0; i <= length; i++) {
+    uint8_t length = (segment.end - segment.start) + 1; // segment numbering is 1-based indexing
+    for(uint8_t i = 0; i < length; i++) {
         ret |= (self.data[(segment.start - 1) + i] << (8 * i)); // converting from little endian format
     }
 
@@ -75,8 +75,8 @@ uint8_t CAN_set_segment(CAN_Frame_t* self, Data_Segment_t segment, uint32_t data
         return 1;
     }
 
-    uint8_t length = segment.end - segment.start; // segment numbering is 1-based indexing
-    for(uint8_t i = 0; i <= length; i++) {
+    uint8_t length = (segment.end - segment.start) + 1; // segment numbering is 1-based indexing
+    for(uint8_t i = 0; i < length; i++) {
         self -> data[(segment.start - 1) + i] = ((data >> (8 * i)) & 0xFF); // converting to little endian format
     }
     
