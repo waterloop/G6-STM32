@@ -1,32 +1,31 @@
 #include <stdio.h>
 #include "circ_queue.h"
 
-// Function to increment head pointer
-void inc_head(Queue_t *self) {
-    if (++self->_head == self->_arr + BUFF_SIZE) {
+static void inc_head(Queue_t *self) {
+    if (++self->_head == self->_arr+self->BUFF_SIZE) {
         self->_head = self->_arr;
+    }
 }
 
-// Function to increment tail pointer
-void inc_tail(Queue_t *self) {
-    if (++self->_tail == self->_arr + BUFF_SIZE) { 
+static void inc_tail(Queue_t *self) {
+    if (++self->_tail == self->_arr+self->BUFF_SIZE) {
         self->_tail = self->_arr;
     }
 }
 
-// intializes and return a queue with zero length and head/tail indices
 Queue_t queue_init() {
-    Queue_t ret = {
-        .len = 0,
-        ._head = 0,
-        ._tail = 0,
-        ._arr = {{0}}
-    };
-    return ret
+    Queue_t ret;
+    ret.len = 0;
+    ret._head = ret._arr;
+    ret._tail = ret._arr;
+    for(int i = 0; i < BUFF_SIZE; i++) {
+        ret._arr[i] = (CAN_Frame_t){0}; // Assuming CAN_Frame_t can be zero-initialized
+    }
+    return ret;
 }
 
 // empty queue, returns 1 if true, 0 if false
-uint8_t queue_empty(Quene_t self) {
+uint8_t queue_empty(Queue_t self) {
     return self.len == 0;
 }
 
@@ -40,9 +39,6 @@ void queue_add(Queue_t* self, CAN_Frame_t frame) {
     if (!(self->len == BUFF_SIZE)) {
         *self->_tail = frame; 
         inc_tail(self); 
-        if (self->len > 0) { 
-            inc_tail(self); 
-        }
         self->len++;
     } else { 
         *self->_head = frame;
