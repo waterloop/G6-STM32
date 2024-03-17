@@ -134,6 +134,7 @@ int main(void)
   MX_CAN3_Init();
   /* USER CODE BEGIN 2 */
   HAL_ADC_Start_DMA(&hadc3, adc_data, NUM_MUX);
+  //change
   /* USER CODE END 2 */
 
   /* Infinite loop */
