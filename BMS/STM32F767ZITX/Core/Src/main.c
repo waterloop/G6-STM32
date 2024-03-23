@@ -104,7 +104,7 @@ uint32_t temp_data[NUM_SAMPLES][NUM_MUX] = {0};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
