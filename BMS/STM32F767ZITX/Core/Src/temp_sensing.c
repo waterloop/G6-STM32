@@ -1,4 +1,5 @@
 #include "temp_sensing.h"
+#include <math.h>
 #include <stdio.h>
 
 
@@ -15,6 +16,24 @@ void enqueue(uint32_t *average_mux_temp, uint32_t mux_temp[NUM_MUX], uint32_t **
 	return;
 }
 
+/*!
+* Calculates the temperature in degrees C from the ADC value through representing the ADC value in terms of resistance and calculating the Temperature using the Steinhart equation for thermistors.
+* @param adc_data Reading from the ADC
+* @return tempSteinhart Temperature in degrees C with double Precision
+*/
+double CalculateTemperature (uint32_t adc_data) {
+	/*
+	* Convert the ADC value being read into a resistance.
+	* R = 8250 / (4096 / (ADC*GainTranslation) - 1)
+	*/
+	double thermistorResistance = KBiasResistance / ((KMaxAdcCount / (adc_data *KGainTranslate)) - 1.0);
+	/*
+	* Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
+	* 1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)
+	*/
+	double tempSteinhart = -KAbsoluteZero + (1.0/((1.0/ (MNominalTemperature + KAbsoluteZero)) + (log(thermistorResistance / MNominalThermistor) / MBCoefficient)));
+	return tempSteinhart;
+}
 
 //Function Description: Measures average thermistor temperature of each MUX
 //Inputs: adc_data(array containing measured values from ADCs), temp_data(array stored in memory containing past n temperature samples)
