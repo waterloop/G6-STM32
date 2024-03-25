@@ -29,4 +29,14 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+<<<<<<< Updated upstream
+=======
+	<linkedResources>
+		<link>
+			<name>Common</name>
+			<type>2</type>
+			<location>C:/Repos/G6-STM32/G6-STM32/Common</location>
+		</link>
+	</linkedResources>
+>>>>>>> Stashed changes
 </projectDescription>
