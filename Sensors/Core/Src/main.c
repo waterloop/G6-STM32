@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
+
+#include "mpu6050.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,6 +80,8 @@ int main(void)
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
+
+
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -102,6 +106,8 @@ int main(void)
   uint8_t error_code = 0;
 
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
+
+  MPU6050_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,6 +117,8 @@ int main(void)
     /* USER CODE END WHILE */
 	  //poll pressure sensor
 	  //poll IMU
+	   MPU6050_Read_Accel();
+	   MPU6050_Read_Gyro();
 	  //poll thermistor MUX
 
 	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
