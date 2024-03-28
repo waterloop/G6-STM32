@@ -36,7 +36,7 @@ float MPU6050_Real_Gyro(char axis){
 	case 'x':
 		int16_t Gyro_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
 		float Gx = Gyro_X_RAW / 131.0;
-		return Ax;
+		return Gx;
 
 	case 'y':
 		int16_t Gyro_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
