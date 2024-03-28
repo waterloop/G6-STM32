@@ -3,44 +3,43 @@
 #include <stdio.h>
 
 
-//Function Description: Adds temperature sample to array stored in memory and updates final average temperature table
-//Inputs: average_mux_temp(old array of average temperatures for each MUX over n samples), mux_temp(array containing 1 sample of MUX temperature data), temp_data(array stored in memory containing past n temperature samples)
-//Outputs: average_mux_temp(updated array of average temperatures for each MUX over n samples), temp_data(modified temperature array)
-void enqueue(uint32_t *average_mux_temp, uint32_t mux_temp[NUM_MUX], uint32_t **temp_data) {
+//Function: Adds temperature sample to array stored in memory and updates final average temperature table
+//Inputs:   temp_average(old array of average temperatures for each MUX over n samples),
+//          temp_snapshot(array containing 1 sample of MUX temperature data),
+//          temp_data(array stored in memory containing past n temperature samples)
+//Outputs:  average_mux_temp(updated array of average temperatures for each MUX over n samples), temp_data(modified temperature array)
+void enqueue(uint32_t *temp_average, uint32_t temp_snapshot[NUM_MUX], uint32_t *temp_data[NUM_MUX]) {
 	rear = (rear + 1) % NUM_SAMPLES;
 	for (uint8_t i = 0U; i < NUM_MUX; ++i){
-		average_mux_temp[i] -= temp_data[rear][i] / NUM_SAMPLES;
-		temp_data[rear][i] = mux_temp[i];
-		average_mux_temp[i] += temp_data[rear][i] / NUM_SAMPLES;
+		temp_average[i] -= temp_data[rear][i] / NUM_SAMPLES;
+		temp_data[rear][i] = temp_snapshot[i];
+		temp_average[i] += temp_data[rear][i] / NUM_SAMPLES;
 	}
 	return;
 }
 
-/*!
-* Calculates the temperature in degrees C from the ADC value through representing the ADC value in terms of resistance and calculating the Temperature using the Steinhart equation for thermistors.
-* @param adc_data Reading from the ADC
-* @return tempSteinhart Temperature in degrees C with double Precision
-*/
-double CalculateTemperature (uint32_t adc_data) {
-	/*
-	* Convert the ADC value being read into a resistance.
-	* R = 8250 / (4096 / (ADC*GainTranslation) - 1)
-	*/
-	double thermistorResistance = KBiasResistance / ((KMaxAdcCount / (adc_data *KGainTranslate)) - 1.0);
-	/*
-	* Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
-	* 1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)
-	*/
-	double tempSteinhart = -KAbsoluteZero + (1.0/((1.0/ (MNominalTemperature + KAbsoluteZero)) + (log(thermistorResistance / MNominalThermistor) / MBCoefficient)));
-	return tempSteinhart;
+//Function: Calculates thermistor value in resistance and converts to degrees C using the Steinhart-Hart equation
+//Inputs:   adc_data(reading from the ADC)
+//Outputs:  tempSteinhart(temperature in degrees C)
+uint32_t calculateTemperature (uint32_t adc_data) {
+	//Convert the ADC value being read into a resistance.
+	//R = 8250 / (4096 / (ADC*GainTranslation) - 1)
+	uint32_t thermistor_resistance = K_BIAS_RESISTANCE / ((K_MAX_ADC_COUNT / (adc_data *K_GAIN_TRANSLATE)) - 1.0);
+
+	//Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
+	//1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)
+	uint32_t temp_steinhart = -K_ABSOLUTE_ZERO + (1.0/((1.0/ (M_NOMINAL_TEMPERATURE + K_ABSOLUTE_ZERO)) + (log(thermistor_resistance / M_NOMINAL_THERMISTOR) / MB_COEFFICIENT)));
+	return temp_steinhart;
 }
 
-//Function Description: Measures average thermistor temperature of each MUX
-//Inputs: adc_data(array containing measured values from ADCs), temp_data(array stored in memory containing past n temperature samples)
-//Outputs: temp_data(modified temperature array)
-void measure_temp(uint32_t *average_mux_temp, uint32_t *adc_data, uint32_t **temp_data)
+//Function: Measures average thermistor temperature of each MUX
+//Inputs:   adc_data(array containing measured values from ADCs),
+//          temp_data(array stored in memory containing past n temperature samples),
+//          temp_average(array containing average multiplexor temperature)
+//Outputs:  temp_data(modified temperature array)
+void measureTempADC(uint32_t *temp_average, uint32_t *adc_data, uint32_t *temp_data[NUM_MUX])
 {
-	uint32_t mux_temp[NUM_MUX] = {0};
+	uint32_t temp_snapshot[NUM_MUX] = {0};
 	for(uint8_t i = 0U; i < NUM_THERM_PER_MUX; ++i){
 		//Increment orientation of MUX control lines.
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, i & 0x1);
@@ -49,10 +48,19 @@ void measure_temp(uint32_t *average_mux_temp, uint32_t *adc_data, uint32_t **tem
 
 		//Record average temperature of each MUX.
 		for(uint8_t i = 0U; i < NUM_MUX; ++i){
-			mux_temp[i] += adc_data[i] / NUM_THERM_PER_MUX;
+			temp_snapshot[i] += calculateTemperature(adc_data[i]) / NUM_THERM_PER_MUX;
 		}
 	}
-	enqueue(average_mux_temp, mux_temp, temp_data);
+	enqueue(temp_average, temp_snapshot, temp_data);
+	return;
+}
 
+//Function: Powers fan using
+//Inputs:   adc_data(array containing measured values from ADCs),
+//          temp_data(array stored in memory containing past n temperature samples),
+//          temp_average(array containing average multiplexor temperature)
+//Outputs:  temp_data(modified temperature array)
+void powerFan()
+{
 	return;
 }
