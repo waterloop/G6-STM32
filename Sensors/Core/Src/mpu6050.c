@@ -3,35 +3,55 @@
 
 extern I2C_HandleTypeDef hi2c1; // Declaration of hi2c1 from main.h
 
-int16_t Accel_X_RAW, Accel_Y_RAW, Accel_Z_RAW;
-int16_t Gyro_X_RAW, Gyro_Y_RAW, Gyro_Z_RAW;
-float Ax, Ay, Az, Gx, Gy, Gz;
+float MPU6050_Real_Accel(char axis, I2C_HandleTypeDef i2c){
+	uint8_t Rec_Data[6];
+	HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
 
-void MPU6050_Read_Accel (void){
-    uint8_t Rec_Data[6];
-    HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
+	switch(axis){
+	case 'x':
+		int16_t Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+		float Ax = Accel_X_RAW / 16384.0;
+		return Ax;
 
-    Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
-    Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
-    Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+	case 'y':
+		int16_t Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
+		float Ay = Accel_Y_RAW / 16384.0;
+		return Ay;
 
-    Ax = Accel_X_RAW / 16384.0;
-    Ay = Accel_Y_RAW / 16384.0;
-    Az = Accel_Z_RAW / 16384.0;
+
+	case 'z': //most likely won't need
+		int16_t Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+		float Az = Accel_Z_RAW / 16384.0;
+		return Az;
+
+
+	}
 }
 
-void MPU6050_Read_Gyro (void){
+float MPU6050_Real_Gyro(char axis){
     uint8_t Rec_Data[6];
     HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, Rec_Data, 6, 1000);
 
-    Gyro_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
-    Gyro_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
-    Gyro_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+	switch(axis){
+	case 'x':
+		int16_t Gyro_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+		float Gx = Gyro_X_RAW / 131.0;
+		return Ax;
 
-    Gx = Gyro_X_RAW / 131.0;
-    Gy = Gyro_Y_RAW / 131.0;
-    Gz = Gyro_Z_RAW / 131.0;
+	case 'y':
+		int16_t Gyro_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
+		float Gy = Gyro_X_RAW / 131.0;
+		return Gy;
+
+
+	case 'z': //most likely won't need
+		int16_t Gyro_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+		float Gz = Gyro_X_RAW / 131.0;
+		return Gz;
+	}
 }
+
+
 
 void MPU6050_Init (void){
     uint8_t check, data;
