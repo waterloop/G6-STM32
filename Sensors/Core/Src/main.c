@@ -117,6 +117,9 @@ int main(void)
 	  //poll IMU
 	  Ax = MPU6050_Read_Accel('x', hi2c2);
 	  Ay = MPU6050_Read_Accel('y', hi2c2);
+	  Gx = MPU6050_Read_Gyro('x', hi2c2);
+	  Gy = MPU6050_Read_Gyro('y', hi2c2);
+
 
 	  //ryder do the same for gyro
 
