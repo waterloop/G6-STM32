@@ -19,11 +19,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "can.h"
+#include "i2c.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
+#include "mpu6050.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -87,17 +89,25 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CAN3_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
   //configure filters
   uint8_t pressure = 0;
-  uint16_t imu = 0;
+//  uint16_t imu = 0;
+  float Ax = 0;
+  float Ay = 0;
+  float Gx = 0;
+  float Gy = 0;
   uint8_t lim_temp_1 = 0;
   uint8_t lim_temp_2 = 0;
   uint8_t error_code = 0;
 
+
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
   /* USER CODE END 2 */
+
+  MPU6050_Init();
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -105,6 +115,12 @@ int main(void)
   {
 	  //poll pressure sensor
 	  //poll IMU
+	  Ax = MPU6050_Read_Accel('x', hi2c2);
+	  Ay = MPU6050_Read_Accel('y', hi2c2);
+
+	  //ryder do the same for gyro
+
+
 	  //poll thermistor MUX
 
 	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
