@@ -1,7 +1,5 @@
 #include "mpu6050.h"
-#include "main.h" // You may need to include this for hi2c1
-
-extern I2C_HandleTypeDef hi2c1; // Declaration of hi2c1 from main.h
+#include "i2c.h" // You may need to include this for hi2c1
 
 float MPU6050_Read_Accel(char axis, I2C_HandleTypeDef i2c){
 	uint8_t Rec_Data[6];
@@ -53,20 +51,20 @@ float MPU6050_Read_Gyro(char axis, I2C_HandleTypeDef i2c){
 
 
 
-void MPU6050_Init (void){
+void MPU6050_Init (I2C_HandleTypeDef i2c){
     uint8_t check, data;
-    HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, WHO_AM_I_REG, 1, &check, 1, 1000);
+    HAL_I2C_Mem_Read(&i2c, MPU6050_ADDR, WHO_AM_I_REG, 1, &check, 1, 1000);
 
     if (check == 104){
         data = 0;
-        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &data, 1, 1000);
+        HAL_I2C_Mem_Write(&i2c, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &data, 1, 1000);
         data = 0x07;
-        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SMPLRT_DIV_REG, 1, &data, 1, 1000);
+        HAL_I2C_Mem_Write(&i2c, MPU6050_ADDR, SMPLRT_DIV_REG, 1, &data, 1, 1000);
 
         data = 0x00;
-        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, &data, 1, 1000);
+        HAL_I2C_Mem_Write(&i2c, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, &data, 1, 1000);
 
         data = 0x00;
-        HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &data, 1, 1000);
+        HAL_I2C_Mem_Write(&i2c, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &data, 1, 1000);
     }
 }

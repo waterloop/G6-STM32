@@ -1,5 +1,7 @@
 #include "can_driver.h"
 
+#define WARN_OFFSET             0xFF
+
 static uint32_t tx_mailbox;
 
 CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {

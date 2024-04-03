@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
 #include "mpu6050.h"
+#include "config.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,10 +96,10 @@ int main(void)
   //configure filters
   uint8_t pressure = 0;
 //  uint16_t imu = 0;
-  float Ax = 0;
-  float Ay = 0;
-  float Gx = 0;
-  float Gy = 0;
+  int Ax = 0;
+  int Ay = 0;
+  int Gx = 0;
+  int Gy = 0;
   uint8_t lim_temp_1 = 0;
   uint8_t lim_temp_2 = 0;
   uint8_t error_code = 0;
@@ -115,10 +116,10 @@ int main(void)
   {
 	  //poll pressure sensor
 	  //poll IMU
-	  Ax = MPU6050_Read_Accel('x', hi2c2);
-	  Ay = MPU6050_Read_Accel('y', hi2c2);
-	  Gx = MPU6050_Read_Gyro('x', hi2c2);
-	  Gy = MPU6050_Read_Gyro('y', hi2c2);
+	  Ax = (int) MPU6050_Read_Accel('x', hi2c2);
+	  Ay = (int) MPU6050_Read_Accel('y', hi2c2);
+	  Gx = (int) MPU6050_Read_Gyro('x', hi2c2);
+	  Gy = (int) MPU6050_Read_Gyro('y', hi2c2);
 
 
 	  //ryder do the same for gyro
@@ -127,10 +128,10 @@ int main(void)
 	  //poll thermistor MUX
 
 	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
-	  CAN_set_segment(&tx_frame, IMU_DATA, imu);
+//	  CAN_set_segment(&tx_frame, IMU_DATA, imu);
 	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
 	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
-	  CAN_set_segment(&tx_frame, ERROR_CODE, error_code);
+	  CAN_set_segment(&tx_frame, BMS_ERROR_CODE, error_code);
 
 	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
 		  CAN_send_frame(tx_frame);
