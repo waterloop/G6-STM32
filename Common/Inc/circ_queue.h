@@ -7,8 +7,8 @@
 typedef struct {
     size_t len;
     CAN_Frame_t _arr[BUFF_SIZE];
-    size_t _head;
-    size_t _tail;
+    size_t* _head;
+    size_t* _tail;
 } Queue_t;
 
 Queue_t queue_init(); // intialize new and empty queue structure
