@@ -18,12 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "can.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
+#include "config.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,13 +46,25 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint32_t rawPressureSensorValue;
+float fCalculatedVoltageFromRawPressureSensorVal;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+uint8_t poll_Pressure_Sensor(void){
+	HAL_ADC_PollForConversion(&hadc1,1000); // I haven't used HAL_MAX_DELAY here because we will be polling two more sensors after the pressure sensor, and waiting for an ADC conversion here indefinitely will result in the next two sensors not being read.
+	rawPressureSensorValue = HAL_ADC_GetValue(&hadc1);
+	//rawPressureSensorValue will be between 0 and 4095.
+	fCalculatedVoltageFromRawPressureSensorVal = rawPressureSensorValue * (3.3/4095.0);
+	//we now have a voltage between 0 and 3.3V
+	HAL_Delay(200);
+	//right now, I will configure this function to return the voltage itself
+	//later on, we need to edit this to return the pressure
+	//the pressure can be easily calculated from the voltage.
+	return (uint8_t)fCalculatedVoltageFromRawPressureSensorVal;
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -87,8 +101,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CAN3_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
+  HAL_ADC_Start(&hadc1);
   //configure filters
   uint8_t pressure = 0;
   uint16_t imu = 0;
@@ -104,6 +120,7 @@ int main(void)
   while (1)
   {
 	  //poll pressure sensor
+	  pressure = poll_Pressure_Sensor();
 	  //poll IMU
 	  //poll thermistor MUX
 
@@ -111,7 +128,7 @@ int main(void)
 	  CAN_set_segment(&tx_frame, IMU_DATA, imu);
 	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
 	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
-	  CAN_set_segment(&tx_frame, ERROR_CODE, error_code);
+	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE, error_code);
 
 	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
 		  CAN_send_frame(tx_frame);
