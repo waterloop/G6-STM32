@@ -20,6 +20,7 @@
 #include "main.h"
 #include "can.h"
 #include "i2c.h"
+#include "adc.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -48,13 +49,25 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint32_t rawPressureSensorValue;
+float fCalculatedVoltageFromRawPressureSensorVal;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+uint8_t poll_Pressure_Sensor(void){
+	HAL_ADC_PollForConversion(&hadc1,1000); // I haven't used HAL_MAX_DELAY here because we will be polling two more sensors after the pressure sensor, and waiting for an ADC conversion here indefinitely will result in the next two sensors not being read.
+	rawPressureSensorValue = HAL_ADC_GetValue(&hadc1);
+	//rawPressureSensorValue will be between 0 and 4095.
+	fCalculatedVoltageFromRawPressureSensorVal = rawPressureSensorValue * (3.3/4095.0);
+	//we now have a voltage between 0 and 3.3V
+	HAL_Delay(200);
+	//right now, I will configure this function to return the voltage itself
+	//later on, we need to edit this to return the pressure
+	//the pressure can be easily calculated from the voltage.
+	return (uint8_t)fCalculatedVoltageFromRawPressureSensorVal;
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -116,7 +129,7 @@ int main(void)
   while (1)
   {
 	  //poll pressure sensor
-	  //...
+	  pressure = poll_Pressure_Sensor();
 
 	  //poll IMU
 	  MPU6050_Read_Accel(&x_accel, &y_accel);
