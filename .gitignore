@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 build
 bin
 temp
@@ -7,9 +6,6 @@ temp
 .vscode/
 .idea/
 .cache
-
 .settings
 .metadata
-=======
 .vscode
->>>>>>> edc909e (Minor fixes)
