@@ -21,12 +21,15 @@
 #include "can.h"
 #include "i2c.h"
 #include "gpio.h"
+#include "stdio.h"
+#include "string.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
 #include "mpu6050.h"
 #include "config.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,6 +67,7 @@ void SystemClock_Config(void);
 /**
   * @brief  The application entry point.
   * @retval int
+  *
   */
 int main(void)
 {
@@ -95,7 +99,7 @@ int main(void)
   HAL_CAN_Start(&hcan3);
   //configure filters
   uint8_t pressure = 0;
-//  uint16_t imu = 0;
+  uint16_t imu = 0;
   int Ax = 0;
   int Ay = 0;
   int Gx = 0;
@@ -108,7 +112,7 @@ int main(void)
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
   /* USER CODE END 2 */
 
-  MPU6050_Init();
+  MPU6050_Init(hi2c2);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -120,6 +124,7 @@ int main(void)
 	  Ay = (int) MPU6050_Read_Accel('y', hi2c2);
 	  Gx = (int) MPU6050_Read_Gyro('x', hi2c2);
 	  Gy = (int) MPU6050_Read_Gyro('y', hi2c2);
+
 
 
 	  //ryder do the same for gyro
@@ -204,6 +209,8 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
+
+
 
 #ifdef  USE_FULL_ASSERT
 /**
