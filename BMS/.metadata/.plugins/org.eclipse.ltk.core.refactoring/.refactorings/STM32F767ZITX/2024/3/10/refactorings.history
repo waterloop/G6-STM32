@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;STM32F767ZITX/BMS.ioc&apos; to &apos;STM32F767ZITX.ioc&apos;" description="Rename resource &apos;BMS.ioc&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BMS.ioc" name="STM32F767ZITX.ioc" stamp="1709682123720" updateReferences="true"/>
-</session>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "main.h"
+#include "adc.h"
 
 #define NUM_MUX 6U //Note: the number of multiplexors must also be changed in the ADC3 configuration
 #define NUM_THERM_PER_MUX 8U
