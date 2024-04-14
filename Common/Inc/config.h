@@ -22,7 +22,11 @@
 // FRAME 1
 const Data_Segment_t DRIVING_DIRECTION_K       = {MOTOR_CONTROLLER_1, 1, 1};
 const Data_Segment_t MOTOR_SPEED_K             = {MOTOR_CONTROLLER_1, 2, 3};
+<<<<<<< HEAD
 const Data_Segment_t MOTOR_ERROR_CODE_K        = {MOTOR_CONTROLLER_1, 4, 4};
+=======
+const Data_Segment_t MOTOR_ERROR_CODE_K        = {MOTOR_CONTROLLER_1, 4, 4}; 
+>>>>>>> c973041 (Fixing minor bugs)
 // FRAME 2
 const Data_Segment_t BATTERY_VOLTAGE_K         = {MOTOR_CONTROLLER_2, 1, 2};
 const Data_Segment_t BATTERY_CURRENT_K         = {MOTOR_CONTROLLER_2, 3, 4};
