@@ -21,6 +21,7 @@
 #include "adc.h"
 #include "can.h"
 #include "dma.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -94,6 +95,8 @@ int main(void)
   MX_ADC1_Init();
   MX_ADC3_Init();
   MX_CAN3_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   HAL_ADC_Start_DMA(&hadc3, adc_data, NUM_MUX);
   /* USER CODE END 2 */
