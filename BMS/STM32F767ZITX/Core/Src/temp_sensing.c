@@ -42,9 +42,9 @@ void measureTempADC(uint32_t *temp_average, uint32_t *adc_data, uint32_t *temp_d
 	uint32_t temp_snapshot[NUM_MUX] = {0};
 	for(uint8_t i = 0U; i < NUM_THERM_PER_MUX; ++i){
 		//Increment orientation of MUX control lines.
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, i & 0x1);
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, i>>1 & 0x1);
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_3, i>>2 & 0x1);
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, i & 0x1);
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, i >> 1 & 0x1);
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, i >> 2 & 0x1);
 
 		//Record average temperature of each MUX.
 		for(uint8_t i = 0U; i < NUM_MUX; ++i){
