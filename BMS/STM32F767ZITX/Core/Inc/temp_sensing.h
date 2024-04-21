@@ -10,13 +10,13 @@
 #define SAMPLE_DELAY 10U
 
 //Steinhart-Hart constants
-#define K_BIAS_RESISTANCE 8250U
-#define K_MAX_ADC_COUNT 4096U
-#define K_GAIN_TRANSLATE 1U //fill in with correct value
-#define K_ABSOLUTE_ZERO 273.15 //fill in with correct value
-#define M_NOMINAL_TEMPERATURE 1U //fill in with correct value
-#define M_NOMINAL_THERMISTOR 1U //fill in with correct value
-#define MB_COEFFICIENT 1U //fill in with correct value
+#define BIAS_RESISTANCE 8250U
+#define MAX_ADC_COUNT 4096U
+#define GAIN_TRANSLATE 1U //fill in with correct value
+#define ABSOLUTE_ZERO 273.15 //fill in with correct value
+#define NOMINAL_TEMPERATURE 1U //fill in with correct value
+#define NOMINAL_RESISTANCE 1U //fill in with correct value
+#define B_COEFFICIENT 1U //fill in with correct value
 
 static int8_t rear = -1;
 //static uint32_t temp_data[NUM_SAMPLES][NUM_MUX];
