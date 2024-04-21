@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
 #include "config.h"
+#include "lim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,14 +95,15 @@ int main(void)
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
+  start_dma();
   //configure filters
   uint8_t pressure = 0;
   uint16_t imu = 0;
-  uint8_t lim_temp_1 = 0;
-  uint8_t lim_temp_2 = 0;
+  uint16_t lim_temps[NUM_LIMS] = {0};
   uint8_t error_code = 0;
 
-  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
+  CAN_Frame_t lim_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
+  CAN_Frame_t imu_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,16 +113,18 @@ int main(void)
 	  //poll pressure sensor
 	  //poll IMU
 	  //poll thermistor MUX
+	  get_lim_data(lim_temps);
 
-	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
-	  CAN_set_segment(&tx_frame, IMU_DATA, imu);
-	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
-	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
-	  CAN_set_segment(&tx_frame, ERROR_CODE, error_code);
 
-	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
-		  CAN_send_frame(tx_frame);
-	  }
+	  CAN_set_segment(&lim_frame, PRESSURE_SENSOR_DATA, pressure);
+	  CAN_set_segment(&lim_frame, LIM_ONE_TEMP, lim_temps[0]);
+	  CAN_set_segment(&lim_frame, LIM_TWO_TEMP, lim_temps[1]);
+	  CAN_set_segment(&lim_frame, SENSORS_ERROR_CODE, error_code);
+
+	  CAN_set_segment(&imu_frame, IMU_DATA, imu); //Create IMU message here
+
+	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) { CAN_send_frame(lim_frame); }
+	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) { CAN_send_frame(imu_frame); }
 
 	  HAL_Delay(500);
     /* USER CODE END WHILE */
