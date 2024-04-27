@@ -100,16 +100,17 @@ int main(void)
   //configure filters
   uint8_t pressure = 0;
   uint16_t imu = 0;
-  int Ax = 0;
-  int Ay = 0;
-  int Gx = 0;
-  int Gy = 0;
+  uint8_t x_accel = 0;
+  uint8_t y_accel = 0;
+  uint8_t x_gyro = 0;
+  uint8_t y_gyro = 0;
   uint8_t lim_temp_1 = 0;
   uint8_t lim_temp_2 = 0;
-  uint8_t error_code = 0;
+  uint8_t error_code_1 = 0;
+  uint8_t error_code_2 = 0;
 
-
-  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
+  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_1);
+  CAN_Frame_t imu_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_2);
   /* USER CODE END 2 */
 
   MPU6050_Init(hi2c2);
@@ -120,12 +121,10 @@ int main(void)
   {
 	  //poll pressure sensor
 	  //poll IMU
-	  Ax = (int) MPU6050_Read_Accel('x', hi2c2);
-	  Ay = (int) MPU6050_Read_Accel('y', hi2c2);
-	  Gx = (int) MPU6050_Read_Gyro('x', hi2c2);
-	  Gy = (int) MPU6050_Read_Gyro('y', hi2c2);
-
-
+	  x_accel = (uint8_t) MPU6050_Read_Accel('x', hi2c2);
+	  y_accel = (uint8_t) MPU6050_Read_Accel('y', hi2c2);
+	  x_gyro = (uint8_t) MPU6050_Read_Gyro('x', hi2c2);
+	  y_gyro = (uint8_t) MPU6050_Read_Gyro('y', hi2c2);
 
 	  //ryder do the same for gyro
 
@@ -133,10 +132,15 @@ int main(void)
 	  //poll thermistor MUX
 
 	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
-//	  CAN_set_segment(&tx_frame, IMU_DATA, imu);
 	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
 	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
-	  CAN_set_segment(&tx_frame, BMS_ERROR_CODE, error_code);
+	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE_1, error_code_1);
+
+	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);
+	  CAN_set_segment(&imu_frame, Y_ACCEL, y_accel);
+	  CAN_set_segment(&imu_frame, X_GYRO, x_gyro);
+	  CAN_set_segment(&imu_frame, Y_GYRO, x_gyro);
+	  CAN_set_segment(&imu_frame, SENSORS_ERROR_CODE_2, error_code_2);
 
 	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
 		  CAN_send_frame(tx_frame);
