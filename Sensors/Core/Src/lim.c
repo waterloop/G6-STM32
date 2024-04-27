@@ -21,12 +21,12 @@ void get_lim_data(uint16_t lim_temps[NUM_LIMS]) {
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, (i >> 1) & 0x1);
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, (i >> 2) & 0x1);
 
-		uint8_t avg_temp = get_temp((uint16_t) adc_data) / NUM_THERM_PER_LIM;
+		uint16_t avg_temp = get_temp((uint16_t) adc_data) / NUM_THERM_PER_LIM;
 		lim_temps[i < 3 ? 0 : 1] += avg_temp;
 	}
 }
 
-uint8_t get_temp(uint16_t adc_value) {
+uint16_t get_temp(uint16_t adc_value) {
 	// Convert the ADC value being read into a resistance.
 	// R = 8250 / (4096 / (ADC * GainTranslation) - 1)
 	uint32_t thermistor_resistance = BIAS_RESISTANCE / ((MAX_ADC_COUNT / (adc_value * GAIN_TRANSLATE)) - 1.0);
