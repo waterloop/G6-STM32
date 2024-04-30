@@ -99,11 +99,11 @@ int main(void)
   HAL_CAN_Start(&hcan3);
   //configure filters
   uint8_t pressure = 0;
-  uint16_t imu = 0;
   uint8_t x_accel = 0;
   uint8_t y_accel = 0;
   uint8_t x_gyro = 0;
   uint8_t y_gyro = 0;
+  uint8_t z_gyro = 0;
   uint8_t lim_temp_1 = 0;
   uint8_t lim_temp_2 = 0;
   uint8_t error_code_1 = 0;
@@ -121,10 +121,11 @@ int main(void)
   {
 	  //poll pressure sensor
 	  //poll IMU
-	  x_accel = (uint8_t) MPU6050_Read_Accel('x', hi2c2);
-	  y_accel = (uint8_t) MPU6050_Read_Accel('y', hi2c2);
-	  x_gyro = (uint8_t) MPU6050_Read_Gyro('x', hi2c2);
-	  y_gyro = (uint8_t) MPU6050_Read_Gyro('y', hi2c2);
+	  x_accel = (uint8_t) MPU6050_Read_Accel('x');
+	  y_accel = (uint8_t) MPU6050_Read_Accel('y');
+	  x_gyro = (uint8_t) MPU6050_Read_Gyro('x');
+	  y_gyro = (uint8_t) MPU6050_Read_Gyro('y');
+	  z_gyro = (uint8_t) MPU6050_Read_Gyro('z');
 
 	  //ryder do the same for gyro
 
@@ -139,7 +140,8 @@ int main(void)
 	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);
 	  CAN_set_segment(&imu_frame, Y_ACCEL, y_accel);
 	  CAN_set_segment(&imu_frame, X_GYRO, x_gyro);
-	  CAN_set_segment(&imu_frame, Y_GYRO, x_gyro);
+	  CAN_set_segment(&imu_frame, Y_GYRO, y_gyro);
+	  CAN_set_segment(&imu_frame, Z_GYRO, z_gyro);
 	  CAN_set_segment(&imu_frame, SENSORS_ERROR_CODE_2, error_code_2);
 
 	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
