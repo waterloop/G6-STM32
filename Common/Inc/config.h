@@ -58,9 +58,9 @@ const Data_Segment_t LIM_ONE_TEMP              = {SENSOR_BOARD_1, 3, 4};
 const Data_Segment_t LIM_TWO_TEMP              = {SENSOR_BOARD_1, 5, 6};
 const Data_Segment_t SENSORS_ERROR_CODE_1      = {SENSOR_BOARD_1, 8, 8};
 //SECOND (IMU) FRAME
-const Data_Segment_t X_ACCEL     			         = {SENSOR_BOARD_2, 1, 1}; 
-const Data_Segment_t Y_ACCEL	                 = {SENSOR_BOARD_2, 2, 2};
-const Data_Segment_t X_GYRO              	     = {SENSOR_BOARD_2, 3, 3};
+const Data_Segment_t X_ACCEL                   = {SENSOR_BOARD_2, 1, 1}; 
+const Data_Segment_t Y_ACCEL                   = {SENSOR_BOARD_2, 2, 2};
+const Data_Segment_t X_GYRO                    = {SENSOR_BOARD_2, 3, 3};
 const Data_Segment_t Y_GYRO                    = {SENSOR_BOARD_2, 4, 4};
 const Data_Segment_t Z_GYRO                    = {SENSOR_BOARD_2, 5, 5};
 const Data_Segment_t SENSORS_ERROR_CODE_2      = {SENSOR_BOARD_2, 8, 8};
