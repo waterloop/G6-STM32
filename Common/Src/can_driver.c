@@ -3,6 +3,7 @@
 #define WARN_OFFSET             0xFF
 
 static uint32_t tx_mailbox;
+#define WARN_OFFSET 0xFF
 
 CAN_Frame_t CAN_frame_init(CAN_HandleTypeDef* handler, uint32_t id) {
     // default conditions
