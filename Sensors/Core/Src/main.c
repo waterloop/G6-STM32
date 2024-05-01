@@ -127,28 +127,25 @@ int main(void)
 	  y_gyro = (uint8_t) MPU6050_Read_Gyro('y');
 	  z_gyro = (uint8_t) MPU6050_Read_Gyro('z');
 
-	  //ryder do the same for gyro
-
-
 	  //poll thermistor MUX
 
-	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
-	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
-	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
-	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE_1, error_code_1);
+//	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
+//	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
+//	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
+//	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE_1, error_code_1);
+//
+//	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);
+//	  CAN_set_segment(&imu_frame, Y_ACCEL, y_accel);
+//	  CAN_set_segment(&imu_frame, X_GYRO, x_gyro);
+//	  CAN_set_segment(&imu_frame, Y_GYRO, y_gyro);
+//	  CAN_set_segment(&imu_frame, Z_GYRO, z_gyro);
+//	  CAN_set_segment(&imu_frame, SENSORS_ERROR_CODE_2, error_code_2);
+//
+//	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
+//		  CAN_send_frame(tx_frame);
+//	  }
 
-	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);
-	  CAN_set_segment(&imu_frame, Y_ACCEL, y_accel);
-	  CAN_set_segment(&imu_frame, X_GYRO, x_gyro);
-	  CAN_set_segment(&imu_frame, Y_GYRO, y_gyro);
-	  CAN_set_segment(&imu_frame, Z_GYRO, z_gyro);
-	  CAN_set_segment(&imu_frame, SENSORS_ERROR_CODE_2, error_code_2);
-
-	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
-		  CAN_send_frame(tx_frame);
-	  }
-
-	  HAL_Delay(500);
+	  HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
