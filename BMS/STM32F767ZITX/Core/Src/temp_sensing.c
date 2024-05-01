@@ -24,7 +24,8 @@ void enqueue(uint32_t *temp_average, uint32_t temp_snapshot[NUM_MUX], uint32_t *
 uint32_t calculateTemperature (uint32_t adc_data) {
 	//Convert the ADC value being read into a resistance.
 	//R = 8250 / (4096 / (ADC*GainTranslation) - 1)
-	uint32_t thermistor_resistance = BIAS_RESISTANCE / ((MAX_ADC_COUNT / (adc_data *GAIN_TRANSLATE)) - 1.0);
+	uint32_t voltage_out = adc_data * VOLTAGE_SUPPLY / 4095U;
+	uint32_t thermistor_resistance = voltage_out * R10K / (VOLTAGE_SUPPLY - voltage_out);
 
 	//Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
 	//1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)

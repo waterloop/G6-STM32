@@ -9,6 +9,9 @@
 #define NUM_SAMPLES 50U
 #define SAMPLE_DELAY 10U
 
+#define R10K 10000U
+#define VOLTAGE_SUPPLY 2.5U
+
 //Steinhart-Hart constants
 #define BIAS_RESISTANCE 8250U
 #define MAX_ADC_COUNT 4096U
