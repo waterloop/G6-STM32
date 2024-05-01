@@ -46,7 +46,7 @@ float MPU6050_Read_Gyro(char axis){
 		case 'z': //most likely won't need
 			int16_t Gyro_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
 			float Gz = Gyro_Z_RAW / 131.0;
-			return Gz;\
+			return Gz;
 
 		default:
 			return 0xFF;
