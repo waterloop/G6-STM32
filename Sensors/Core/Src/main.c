@@ -92,13 +92,14 @@ int main(void)
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 //  HAL_CAN_Start(&hcan3);
+  MPU6050_Init(hi2c2);
   //configure filters
 //  uint8_t pressure = 0;
-  uint8_t x_accel = 0;
-  uint8_t y_accel = 0;
-  uint8_t x_gyro = 0;
-  uint8_t y_gyro = 0;
-  uint8_t z_gyro = 0;
+  int8_t x_accel = 0;
+  int8_t y_accel = 0;
+  int8_t x_gyro = 0;
+  int8_t y_gyro = 0;
+  int8_t z_gyro = 0;
 //  uint8_t lim_temp_1 = 0;
 //  uint8_t lim_temp_2 = 0;
 //  uint8_t error_code_1 = 0;
@@ -114,11 +115,8 @@ int main(void)
   {
 	  //poll pressure sensor
 	  //poll IMU
-	  x_accel = (uint8_t) MPU6050_Read_Accel('x');
-	  y_accel = (uint8_t) MPU6050_Read_Accel('y');
-	  x_gyro = (uint8_t) MPU6050_Read_Gyro('x');
-	  y_gyro = (uint8_t) MPU6050_Read_Gyro('y');
-	  z_gyro = (uint8_t) MPU6050_Read_Gyro('z');
+	  MPU6050_Read_Accel(&x_accel, &y_accel);
+	  MPU6050_Read_Gyro(&x_gyro, &y_gyro, &z_gyro);
 
 //	  printf("%d \n", x_accel);
 //	  printf("%d \n", y_accel);

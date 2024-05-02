@@ -4,7 +4,7 @@
 
 static I2C_HandleTypeDef i2c_handler;
 
-float MPU6050_Read_Accel(char axis){
+void MPU6050_Read_Accel(int8_t* x_accel, int8_t* y_accel){
 	uint8_t Rec_Data[6];
 	HAL_I2C_Mem_Read(&i2c_handler, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
 //	printf("%d, ", Rec_Data[0]);
@@ -14,50 +14,26 @@ float MPU6050_Read_Accel(char axis){
 //	printf("%d, ", Rec_Data[4]);
 //	printf("%d, \n", Rec_Data[5]);
 
-	switch(axis){
-		case 'x':
-			int16_t Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
-			float Ax = Accel_X_RAW / 16384.0;
-			return Ax;
 
-		case 'y':
-			int16_t Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
-			float Ay = Accel_Y_RAW / 16384.0;
-			return Ay;
+	int16_t Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+	*x_accel = (Accel_X_RAW / 16384.0);
 
-		case 'z': //most likely won't need
-			int16_t Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
-			float Az = Accel_Z_RAW / 16384.0;
-			return Az;
-
-		default:
-			return 0xFF;
-	}
+	int16_t Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
+	*y_accel = Accel_Y_RAW / 16384.0;
 }
 
-float MPU6050_Read_Gyro(char axis){
+void MPU6050_Read_Gyro(int8_t* x_gyro, int8_t* y_gyro, int8_t* z_gyro){
     uint8_t Rec_Data[6];
     HAL_I2C_Mem_Read(&i2c_handler, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, Rec_Data, 6, 1000);
 
-	switch(axis){
-		case 'x':
-			int16_t Gyro_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
-			float Gx = Gyro_X_RAW / 131.0;
-			return Gx;
+	int16_t Gyro_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+	*x_gyro = Gyro_X_RAW / 131.0;
 
-		case 'y':
-			int16_t Gyro_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
-			float Gy = Gyro_Y_RAW / 131.0;
-			return Gy;
+	int16_t Gyro_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
+	*y_gyro = Gyro_Y_RAW / 131.0;
 
-		case 'z': //most likely won't need
-			int16_t Gyro_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
-			float Gz = Gyro_Z_RAW / 131.0;
-			return Gz;
-
-		default:
-			return 0xFF;
-	}
+	int16_t Gyro_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+	*z_gyro = Gyro_Z_RAW / 131.0;
 }
 
 

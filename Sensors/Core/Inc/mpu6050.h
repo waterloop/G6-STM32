@@ -11,5 +11,5 @@
 #define GYRO_CONFIG_REG     0x1B
 
 void MPU6050_Init(I2C_HandleTypeDef hi2c);
-float MPU6050_Read_Accel(char axis);
-float MPU6050_Read_Gyro(char axis);
+void MPU6050_Read_Accel(int8_t* x_accel, int8_t* y_accel);
+void MPU6050_Read_Gyro(int8_t* x_gyro, int8_t* y_gyro, int8_t* z_gyro);
