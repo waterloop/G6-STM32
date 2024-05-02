@@ -21,14 +21,12 @@
 #include "can.h"
 #include "i2c.h"
 #include "gpio.h"
-#include "stdio.h"
-#include "string.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
-#include "mpu6050.h"
 #include "config.h"
+#include "mpu6050.h"
 
 /* USER CODE END Includes */
 
@@ -67,7 +65,6 @@ void SystemClock_Config(void);
 /**
   * @brief  The application entry point.
   * @retval int
-  *
   */
 int main(void)
 {
@@ -97,6 +94,7 @@ int main(void)
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
+  MPU6050_Init(hi2c2);
   //configure filters
   uint8_t pressure = 0;
   uint8_t x_accel = 0;
@@ -112,8 +110,6 @@ int main(void)
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_1);
   CAN_Frame_t imu_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_2);
   /* USER CODE END 2 */
-
-  MPU6050_Init(hi2c2);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -215,8 +211,6 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-
 
 #ifdef  USE_FULL_ASSERT
 /**
