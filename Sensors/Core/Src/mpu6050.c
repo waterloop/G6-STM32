@@ -1,11 +1,18 @@
 #include "mpu6050.h"
 #include "i2c.h" // You may need to include this for hi2c1
+#include <stdio.h>
 
 static I2C_HandleTypeDef i2c_handler;
 
 float MPU6050_Read_Accel(char axis){
 	uint8_t Rec_Data[6];
 	HAL_I2C_Mem_Read(&i2c_handler, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 6, 1000);
+//	printf("%d, ", Rec_Data[0]);
+//	printf("%d, ", Rec_Data[1]);
+//	printf("%d, ", Rec_Data[2]);
+//	printf("%d, ", Rec_Data[3]);
+//	printf("%d, ", Rec_Data[4]);
+//	printf("%d, \n", Rec_Data[5]);
 
 	switch(axis){
 		case 'x':

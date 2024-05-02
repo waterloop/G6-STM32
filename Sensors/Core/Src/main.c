@@ -18,18 +18,15 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "can.h"
 #include "i2c.h"
 #include "gpio.h"
-#include "stdio.h"
-#include "string.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "can_driver.h"
+//#include "can_driver.h"
+//#include "config.h"
 #include "mpu6050.h"
-#include "config.h"
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,7 +64,6 @@ void SystemClock_Config(void);
 /**
   * @brief  The application entry point.
   * @retval int
-  *
   */
 int main(void)
 {
@@ -93,27 +89,24 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_CAN3_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
-  HAL_CAN_Start(&hcan3);
+//  HAL_CAN_Start(&hcan3);
   //configure filters
-  uint8_t pressure = 0;
+//  uint8_t pressure = 0;
   uint8_t x_accel = 0;
   uint8_t y_accel = 0;
   uint8_t x_gyro = 0;
   uint8_t y_gyro = 0;
   uint8_t z_gyro = 0;
-  uint8_t lim_temp_1 = 0;
-  uint8_t lim_temp_2 = 0;
-  uint8_t error_code_1 = 0;
-  uint8_t error_code_2 = 0;
+//  uint8_t lim_temp_1 = 0;
+//  uint8_t lim_temp_2 = 0;
+//  uint8_t error_code_1 = 0;
+//  uint8_t error_code_2 = 0;
 
-  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_1);
-  CAN_Frame_t imu_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_2);
+//  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_1);
+//  CAN_Frame_t imu_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_2);
   /* USER CODE END 2 */
-
-  MPU6050_Init(hi2c2);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -126,6 +119,12 @@ int main(void)
 	  x_gyro = (uint8_t) MPU6050_Read_Gyro('x');
 	  y_gyro = (uint8_t) MPU6050_Read_Gyro('y');
 	  z_gyro = (uint8_t) MPU6050_Read_Gyro('z');
+
+//	  printf("%d \n", x_accel);
+//	  printf("%d \n", y_accel);
+//	  printf("%d \n", x_gyro);
+//	  printf("%d \n", y_gyro);
+//	  printf("%d \n", z_gyro);
 
 	  //poll thermistor MUX
 
@@ -165,7 +164,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -173,8 +172,21 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 216;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLR = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Activate the Over-Drive mode
+  */
+  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
@@ -183,18 +195,30 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
   {
     Error_Handler();
   }
 }
 
 /* USER CODE BEGIN 4 */
+
+int _write(int file, char *ptr, int len)
+{
+  (void)file;
+  int DataIdx;
+
+  for (DataIdx = 0; DataIdx < len; DataIdx++)
+  {
+    ITM_SendChar(*ptr++);
+  }
+  return len;
+}
 
 /* USER CODE END 4 */
 
@@ -212,8 +236,6 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-
 
 #ifdef  USE_FULL_ASSERT
 /**
