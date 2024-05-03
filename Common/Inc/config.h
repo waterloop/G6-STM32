@@ -7,8 +7,13 @@
 #define WARN_OFFSET             0xFF
 
 // MOTOR CONTROLLER
+<<<<<<< HEAD
 #define MOTOR_CONTROLLER_K1      0x10F8109A
 #define MOTOR_CONTROLLER_K2      0x10F8108D
+=======
+#define MOTOR_CONTROLLER_K1     0x10F8109A
+#define MOTOR_CONTROLLER_K2     0x10F8108D
+>>>>>>> f4efda491170afeb39f61fec1e230146b4c04ea7
 #define MOTOR_CONTROLLER        0xFF
 #define MOTOR_CONTROLLER_WARN   MOTOR_CONTROLLER - WARN_OFFSET
 // BMS
@@ -58,10 +63,10 @@ const Data_Segment_t LIM_ONE_TEMP              = {SENSOR_BOARD_1, 3, 4};
 const Data_Segment_t LIM_TWO_TEMP              = {SENSOR_BOARD_1, 5, 6};
 const Data_Segment_t SENSORS_ERROR_CODE_1      = {SENSOR_BOARD_1, 8, 8};
 //SECOND (IMU) FRAME
-const Data_Segment_t X_ACCEL                   = {SENSOR_BOARD_2, 1, 1}; 
-const Data_Segment_t Y_ACCEL                   = {SENSOR_BOARD_2, 2, 2};
-const Data_Segment_t X_GYRO                    = {SENSOR_BOARD_2, 3, 3};
-const Data_Segment_t Y_GYRO                    = {SENSOR_BOARD_2, 4, 4};
-const Data_Segment_t Z_GYRO                    = {SENSOR_BOARD_2, 5, 5};
+const Data_Segment_t X_ACCEL                   = {SENSOR_BOARD_2, 1, 2}; 
+const Data_Segment_t Y_ACCEL                   = {SENSOR_BOARD_2, 3, 4};
+const Data_Segment_t X_GYRO                    = {SENSOR_BOARD_2, 5, 5};
+const Data_Segment_t Y_GYRO                    = {SENSOR_BOARD_2, 6, 6};
+const Data_Segment_t Z_GYRO                    = {SENSOR_BOARD_2, 7, 7};
 const Data_Segment_t SENSORS_ERROR_CODE_2      = {SENSOR_BOARD_2, 8, 8};
 // END SENSORS BOARD DEFS
