@@ -24,7 +24,7 @@
 #define LSB_TO_G			1 / 2048
 #define	G_TO_MS2			9.80665
 
-#define LSB_TO_RAD_S		16.4
+#define LSB_TO_RAD_S		1 / 131
 
 void MPU6050_Init(I2C_HandleTypeDef hi2c);
 void MPU6050_Read_Accel(int16_t* x_accel, int16_t* y_accel);
