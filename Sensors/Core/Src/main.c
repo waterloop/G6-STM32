@@ -95,8 +95,8 @@ int main(void)
   MPU6050_Init(hi2c2);
   //configure filters
 //  uint8_t pressure = 0;
-  int8_t x_accel = 0;
-  int8_t y_accel = 0;
+  int16_t x_accel = 0;
+  int16_t y_accel = 0;
   int8_t x_gyro = 0;
   int8_t y_gyro = 0;
   int8_t z_gyro = 0;
@@ -118,11 +118,15 @@ int main(void)
 	  MPU6050_Read_Accel(&x_accel, &y_accel);
 	  MPU6050_Read_Gyro(&x_gyro, &y_gyro, &z_gyro);
 
+//	  printf("x: %d ", x_gyro);
+//	  printf("y: %d ", y_gyro);
+//	  printf("z: %d \n", z_gyro);
+
 //	  printf("%d \n", x_accel);
 //	  printf("%d \n", y_accel);
-//	  printf("%d \n", x_gyro);
-//	  printf("%d \n", y_gyro);
-//	  printf("%d \n", z_gyro);
+	  printf("%d ", x_gyro);
+	  printf("%d ", y_gyro);
+	  printf("%d \n", z_gyro);
 
 	  //poll thermistor MUX
 
@@ -142,7 +146,7 @@ int main(void)
 //		  CAN_send_frame(tx_frame);
 //	  }
 
-	  HAL_Delay(200);
+	  HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
