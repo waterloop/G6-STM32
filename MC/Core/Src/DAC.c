@@ -29,7 +29,7 @@ void DAC_write(DAC_t* dacInstance, float voltage)
 
 static uint16_t calculate_code(DAC_t* dacInstance, float voltage)
 {
-	voltage = fabs(voltage);
+	voltage = fabs(voltage - (0.01 * (voltage * 2)));
 	return (uint16_t)(voltage * MAX_CODE / dacInstance->vref - DAC_OFFSET);
 }
 

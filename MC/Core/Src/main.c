@@ -106,7 +106,15 @@ int main(void)
   {
 
     DAC_write(&throttle, 0);
-    HAL_Delay(5000);
+    DAC_write(&throttle, 1);
+    DAC_write(&throttle, 1.5);
+    DAC_write(&throttle, 2);
+    DAC_write(&throttle, 2.5);
+    DAC_write(&throttle, 3);
+    DAC_write(&throttle, 3.5);
+    DAC_write(&throttle, 4);
+    DAC_write(&throttle, 4.5);
+    DAC_write(&throttle, 5);
 
 //	while (HAL_CAN_GetRxFifoFillLevel(&hcan3, CAN_RX_FIFO1)) {
 //		MC_execute_command(CAN_get_frame(&hcan3, CAN_RX_FIFO1));
