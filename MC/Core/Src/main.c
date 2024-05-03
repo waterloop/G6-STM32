@@ -24,7 +24,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "motor_controller.h"
+//#include "motor_controller.h"
+#include "dac.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,28 +92,33 @@ int main(void)
   MX_I2C2_Init();
   MX_CAN3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_CAN_Start(&hcan3);
+//  HAL_CAN_Start(&hcan3);
 
-  Motor_Controller_Data_t data_struct = MC_init(&hcan3);
-  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, 0xFFFFFFFF);
+  DAC_t throttle = DAC_init(&hi2c2);
+
+//  Motor_Controller_Data_t data_struct = MC_init(&hcan3);
+//  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, 0xFFFFFFFF);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	while (HAL_CAN_GetRxFifoFillLevel(&hcan3, CAN_RX_FIFO1)) {
-		MC_execute_command(CAN_get_frame(&hcan3, CAN_RX_FIFO1));
-	}
 
-	if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
-		MC_get_data(&data_struct);
-	}
+    DAC_write(&throttle, 0);
+    HAL_Delay(5000);
 
-	//build tx_frame here
-
-	CAN_send_frame(tx_frame);
-	HAL_Delay(50);
+//	while (HAL_CAN_GetRxFifoFillLevel(&hcan3, CAN_RX_FIFO1)) {
+//		MC_execute_command(CAN_get_frame(&hcan3, CAN_RX_FIFO1));
+//	}
+//
+//	if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
+//		MC_get_data(&data_struct);
+//	}
+//
+//	//build tx_frame here
+//
+//	CAN_send_frame(tx_frame);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
