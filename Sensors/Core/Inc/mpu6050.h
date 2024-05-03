@@ -24,7 +24,7 @@
 #define LSB_TO_G            1 / 2048
 #define	G_TO_MS2            9.80665
 
-#define LSB_TO_RAD_S        1 / 16.4
+#define LSB_TO_RAD_S        1 / 131
 
 #define TIMEOUT             100
 
