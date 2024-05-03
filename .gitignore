@@ -3,8 +3,17 @@ bin
 temp
 */Debug/
 .DS_Store
+<<<<<<< HEAD
 .vscode
 .cache
 
 .settings
 .metadata
+=======
+.vscode/
+.idea/
+.cache
+.settings
+.metadata
+.vscode
+>>>>>>> f4efda491170afeb39f61fec1e230146b4c04ea7
