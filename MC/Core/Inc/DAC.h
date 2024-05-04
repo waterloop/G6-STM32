@@ -34,7 +34,7 @@ typedef struct {
 DAC_t DAC_init(I2C_HandleTypeDef* hi2c);
 
 // Writes to DAC registers only
-void DAC_write(DAC_t* dacInstance, float voltage);
+void DAC_write(DAC_t dacInstance, float voltage);
 
 
 // Calculates the required input code to reach a desired function
@@ -43,16 +43,16 @@ void DAC_write(DAC_t* dacInstance, float voltage);
 // Actual Vout = Vout_predicted + offset
 //
 // Ideally sticking to range of codes 100 to 4000 to avoid gain errors
-static uint16_t calculate_code(DAC_t* dacInstance, float voltage);
+uint16_t calculate_code(DAC_t dacInstance, float voltage);
 
 // Sends reset call to the DAC
-static void reset_dac(DAC_t* dacInstance);
+void reset_dac(DAC_t dacInstance);
 
 // Sends wake up call to the DAC
-static void wake_up_dac(DAC_t* dacInstance);
+void wake_up_dac(DAC_t dacInstance);
 
 // Sends a command (uses fast mode by default)
-static void send_command(DAC_t* dacInstance);
+void send_command(DAC_t dacInstance);
 
 
 #endif /* DAC_H */

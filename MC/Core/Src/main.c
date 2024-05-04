@@ -92,7 +92,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
 
-  Motor_Controller_Data_t data_struct = MC_init(&hcan3);
+  Motor_Controller_t data_struct = MC_init(&hcan3, &hi2c2);
   CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, 0xFFFFFFFF);
   /* USER CODE END 2 */
 
@@ -109,6 +109,7 @@ int main(void)
 	}
 
 	//build tx_frame here
+	//...
 
 	CAN_send_frame(tx_frame);
 	HAL_Delay(50);
