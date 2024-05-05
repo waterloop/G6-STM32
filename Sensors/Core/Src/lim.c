@@ -26,12 +26,13 @@ void get_lim_data(uint16_t lim_temps[NUM_LIMS]) {
 	}
 }
 
-uint16_t get_temp(uint16_t adc_value) {
-	// Convert the ADC value being read into a resistance.
-	// R = 8250 / (4096 / (ADC * GainTranslation) - 1)
-	uint32_t thermistor_resistance = BIAS_RESISTANCE / ((MAX_ADC_COUNT / (adc_value * GAIN_TRANSLATE)) - 1.0);
+uint32_t get_temp(uint16_t adc_value) {
+		//Convert the ADC value being read into a resistance.
+		uint32_t voltage_in = adc_data * (VOLTAGE_SUPPLY / MAX_ADC_COUNT);
+		uint32_t thermistor_resistance = voltage_in * R10K / (VOLTAGE_SUPPLY - voltage_in);
 
-	// Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
-	// 1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)
-	return (-ABSOLUTE_ZERO + (1.0 / ((1.0 / (NOMINAL_TEMPERATURE + ABSOLUTE_ZERO)) + (log(thermistor_resistance / NOMINAL_RESISTANCE) / B_COEFFICIENT))));
+		//Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
+		//1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)
+		uint32_t temp_steinhart = -ABSOLUTE_ZERO + (1.0/((1.0/ (NOMINAL_TEMPERATURE + ABSOLUTE_ZERO)) + (log(thermistor_resistance / NOMINAL_RESISTANCE) / B_COEFFICIENT)));
+		return temp_steinhart;
 }

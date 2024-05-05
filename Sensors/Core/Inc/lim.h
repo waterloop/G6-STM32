@@ -16,17 +16,18 @@
 #define NUM_MUX 				1U
 
 //Steinhart-Hart constants
-#define BIAS_RESISTANCE 		8250U
-#define MAX_ADC_COUNT 			4096U
-#define GAIN_TRANSLATE 			1U 		//fill in with correct value
-#define ABSOLUTE_ZERO 			273.15 	//fill in with correct value
-#define NOMINAL_TEMPERATURE 	1U 		//fill in with correct value
-#define NOMINAL_RESISTANCE 		1U 		//fill in with correct value
-#define B_COEFFICIENT 			1U 		//fill in with correct value
+#define MAX_ADC_COUNT           4096U
+#define ABSOLUTE_ZERO           273.15
+#define NOMINAL_TEMPERATURE     25U
+#define NOMINAL_RESISTANCE 	    10000U
+#define B_COEFFICIENT 		    3950U
+
+#define VOLTAGE_SUPPLY          3.3
+#define R10K                    10000U
 
 
 void start_dma(void);
 void get_lim_data(uint16_t lim_temps[NUM_LIMS]);
-uint8_t get_temp(uint16_t adc_value);
+uint32_t get_temp(uint16_t adc_value);
 
 #endif /* INC_LIM_H_ */
