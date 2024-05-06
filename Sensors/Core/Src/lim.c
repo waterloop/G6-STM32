@@ -16,6 +16,7 @@ void start_dma(void) {
 }
 
 void get_lim_data(uint16_t lim_temps[NUM_LIMS]) {
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, 0 & 0x1);
 	for (uint8_t i = 0; i < NUM_THERM_TOTAL; i++) {
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, i & 0x1);
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, (i >> 1) & 0x1);
@@ -24,6 +25,7 @@ void get_lim_data(uint16_t lim_temps[NUM_LIMS]) {
 		uint16_t avg_temp = get_temp((uint16_t) adc_data) / NUM_THERM_PER_LIM;
 		lim_temps[i < 3 ? 0 : 1] += avg_temp;
 	}
+	return;
 }
 
 uint32_t get_temp(uint16_t adc_value) {
