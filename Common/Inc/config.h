@@ -11,9 +11,11 @@
 #define MOTOR_CONTROLLER_K2     0x10F8108D
 #define MOTOR_CONTROLLER        0xFF
 #define MOTOR_CONTROLLER_WARN   MOTOR_CONTROLLER - WARN_OFFSET
+
 // BMS
 #define BMS_BOARD               0xFF
 #define BMS_BOARD_WARN          BMS_TEMP - WARN_OFFSET
+
 // SENSORS
 #define SENSOR_BOARD_1          0xFF
 #define SENSOR_BOARD_1_WARN     SENSOR_BOARD_1 - WARN_OFFSET
@@ -53,7 +55,7 @@ const Data_Segment_t BMS_ERROR_CODE            = {BMS_BOARD, 8, 8};
 
 // BEGIN SENSORS BOARD DEFS
 //FIRST FRAME
-const Data_Segment_t PRESSURE_SENSOR_DATA      = {SENSOR_BOARD_1, 1, 2}; 
+const Data_Segment_t PRESSURE                  = {SENSOR_BOARD_1, 1, 2};
 const Data_Segment_t LIM_ONE_TEMP              = {SENSOR_BOARD_1, 3, 4};
 const Data_Segment_t LIM_TWO_TEMP              = {SENSOR_BOARD_1, 5, 6};
 const Data_Segment_t SENSORS_ERROR_CODE_1      = {SENSOR_BOARD_1, 8, 8};

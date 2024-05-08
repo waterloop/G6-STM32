@@ -19,11 +19,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "can.h"
+#include "i2c.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can_driver.h"
+#include "config.h"
+#include "mpu6050.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -87,16 +91,24 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CAN3_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
+  MPU6050_Init(hi2c2);
   //configure filters
   uint8_t pressure = 0;
-  uint16_t imu = 0;
+  int16_t x_accel = 0;
+  int16_t y_accel = 0;
+  int8_t x_gyro = 0;
+  int8_t y_gyro = 0;
+  int8_t z_gyro = 0;
   uint8_t lim_temp_1 = 0;
   uint8_t lim_temp_2 = 0;
-  uint8_t error_code = 0;
+  uint8_t error_code_1 = 0;
+  uint8_t error_code_2 = 0;
 
-  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD);
+  CAN_Frame_t tx_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_1);
+  CAN_Frame_t imu_frame = CAN_frame_init(&hcan3, SENSOR_BOARD_2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,17 +116,34 @@ int main(void)
   while (1)
   {
 	  //poll pressure sensor
-	  //poll IMU
-	  //poll thermistor MUX
+	  //...
 
-	  CAN_set_segment(&tx_frame, PRESSURE_SENSOR_DATA, pressure);
-	  CAN_set_segment(&tx_frame, IMU_DATA, imu);
+	  //poll IMU
+	  MPU6050_Read_Accel(&x_accel, &y_accel);
+	  MPU6050_Read_Gyro(&x_gyro, &y_gyro, &z_gyro);
+
+	  //poll LIM thermistors
+	  //...
+
+	  //Pack CAN messages
+	  CAN_set_segment(&tx_frame, PRESSURE, pressure);
 	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
 	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
-	  CAN_set_segment(&tx_frame, ERROR_CODE, error_code);
+	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE_1, error_code_1);
 
+	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);
+	  CAN_set_segment(&imu_frame, Y_ACCEL, y_accel);
+	  CAN_set_segment(&imu_frame, X_GYRO, x_gyro);
+	  CAN_set_segment(&imu_frame, Y_GYRO, y_gyro);
+	  CAN_set_segment(&imu_frame, Z_GYRO, z_gyro);
+	  CAN_set_segment(&imu_frame, SENSORS_ERROR_CODE_2, error_code_2);
+
+	  //Send CAN messages
 	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
 		  CAN_send_frame(tx_frame);
+	  }
+	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) {
+		  CAN_send_frame(imu_frame);
 	  }
 
 	  HAL_Delay(500);
