@@ -21,6 +21,7 @@
 #define MAX_CODE 4095
 
 #define DAC_OFFSET 0
+#define DAC_GAIN 1
 
 typedef struct {
 	I2C_HandleTypeDef* hi2c;
