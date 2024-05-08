@@ -113,6 +113,12 @@ int main(void)
 	  //poll IMU
 	  //poll thermistor MUX
 	  get_lim_data(lim_temps);
+//	  printf("lim_1 = %d \n", lim_temps[0]);
+//	  printf("lim_2 = %d \n", lim_temps[1]);
+
+	  for (int i=0; i < 2; i++) {
+		  lim_temps[i] = 0;
+	  }
 
 //	  CAN_set_segment(&lim_frame, PRESSURE_SENSOR_DATA, pressure);
 //	  CAN_set_segment(&lim_frame, LIM_ONE_TEMP, lim_temps[0]);
@@ -124,7 +130,7 @@ int main(void)
 //	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) { CAN_send_frame(lim_frame); }
 //	  if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan3)) { CAN_send_frame(imu_frame); }
 
-	  HAL_Delay(100);
+	  HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -178,7 +184,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV16;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
   {

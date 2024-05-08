@@ -9,23 +9,22 @@
 #include "adc.h"
 #include <math.h>
 
-static uint32_t adc_data;
+static uint32_t adc_data = 0;
 
 void start_dma(void) {
 	HAL_ADC_Start_DMA(&hadc3, &adc_data, NUM_MUX);
 }
 
 void get_lim_data(uint16_t lim_temps[NUM_LIMS]) {
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, 0 & 0x1);
 	for (uint8_t i = 0; i < NUM_THERM_TOTAL; i++) {
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, i & 0x1);
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, (i >> 1) & 0x1);
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, (i >> 2) & 0x1);
 
 		uint16_t avg_temp = get_temp((uint16_t) adc_data) / NUM_THERM_PER_LIM;
+		printf("adc: %d \n", adc_data);
 		lim_temps[i < 3 ? 0 : 1] += avg_temp;
 	}
-	return;
 }
 
 uint32_t get_temp(uint16_t adc_value) {
