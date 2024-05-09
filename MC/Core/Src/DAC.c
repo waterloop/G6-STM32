@@ -14,17 +14,39 @@ DAC_t DAC_init(I2C_HandleTypeDef* hi2c)
 	dacInstance.dac_address = DAC_I2C_WRITE_ADDRESS;
 	dacInstance.high_speed_mode = 0;
 	dacInstance.hi2c = hi2c;
+	dacInstance.current_val = 2.5;
 	reset_dac(dacInstance);
+	DAC_write(dacInstance, 0);
 
 	return dacInstance;
 }
 
 void DAC_write(DAC_t dacInstance, float voltage)
 {
-	uint16_t tempVal = calculate_code(dacInstance, voltage);
-	dacInstance.buffer[0] = tempVal >> 8 & 0xFF;
-	dacInstance.buffer[1] = tempVal & 0xFF;
-	send_command(dacInstance);
+	if (dacInstance.current_val < voltage)
+	{
+		for(float temp_voltage = dacInstance.current_val; temp_voltage < voltage; temp_voltage += 0.005)
+		{
+			uint16_t tempVal = calculate_code(dacInstance, temp_voltage);
+			dacInstance.buffer[0] = tempVal >> 8 & 0xFF;
+			dacInstance.buffer[1] = tempVal & 0xFF;
+			send_command(dacInstance);
+			dacInstance.current_val = temp_voltage;
+			HAL_Delay(200);
+		}
+	}
+	else
+	{
+		for(float temp_voltage = dacInstance.current_val; temp_voltage > voltage; temp_voltage -= 0.005)
+		{
+			uint16_t tempVal = calculate_code(dacInstance, temp_voltage);
+			dacInstance.buffer[0] = tempVal >> 8 & 0xFF;
+			dacInstance.buffer[1] = tempVal & 0xFF;
+			send_command(dacInstance);
+			dacInstance.current_val = temp_voltage;
+			HAL_Delay(200);
+		}
+	}
 }
 
 uint16_t calculate_code(DAC_t dacInstance, float voltage)

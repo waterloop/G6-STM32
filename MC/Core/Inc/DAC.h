@@ -29,6 +29,7 @@ typedef struct {
 	uint8_t dac_address;
 	uint8_t buffer[2];
 	uint8_t high_speed_mode;
+	float current_val;
 } DAC_t;
 
 // Sends a reset command to ensure EEPROM data is available to output
