@@ -102,19 +102,44 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  DAC_write(&throttle, 0);
+
+  for(int i = 0; i < 40; i++) {
+	  DAC_write(&throttle, i*0.05);
+	  HAL_Delay(500);
+  }
+
+  for(int i = 40; i > 0; i--) {
+  	  DAC_write(&throttle, i*0.05);
+  	  HAL_Delay(500);
+  }
+
+  for(int i = 0; i < 40; i++) {
+	  DAC_write(&throttle, i*0.05);
+	  HAL_Delay(500);
+  }
+
   while (1)
   {
-
-    DAC_write(&throttle, 0);
-    DAC_write(&throttle, 1);
-    DAC_write(&throttle, 1.5);
-    DAC_write(&throttle, 2);
-    DAC_write(&throttle, 2.5);
-    DAC_write(&throttle, 3);
-    DAC_write(&throttle, 3.5);
-    DAC_write(&throttle, 4);
-    DAC_write(&throttle, 4.5);
-    DAC_write(&throttle, 5);
+//    DAC_write(&throttle, 0);
+//    DAC_write(&throttle, 0.1);
+//    DAC_write(&throttle, 0.2);
+//    DAC_write(&throttle, 0.3);
+//	DAC_write(&throttle, 0.4);
+//	DAC_write(&throttle, 0.5);
+//	DAC_write(&throttle, 0.6);
+//	DAC_write(&throttle, 0.7);
+//	DAC_write(&throttle, 0.8);
+//	DAC_write(&throttle, 0.9);
+//    DAC_write(&throttle, 1);
+//    DAC_write(&throttle, 1.1);
+//    DAC_write(&throttle, 1.2);
+//    DAC_write(&throttle, 1.3);
+//    DAC_write(&throttle, 1.4);
+//    DAC_write(&throttle, 1.5);
+//    DAC_write(&throttle, 1.6);
+//    DAC_write(&throttle, 1.9);
+//    DAC_write(&throttle, 2);
 
 //	while (HAL_CAN_GetRxFifoFillLevel(&hcan3, CAN_RX_FIFO1)) {
 //		MC_execute_command(CAN_get_frame(&hcan3, CAN_RX_FIFO1));
