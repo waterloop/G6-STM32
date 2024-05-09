@@ -8,6 +8,7 @@
 #include "lim.h"
 #include "adc.h"
 #include <math.h>
+#include <stdio.h>
 
 void get_lim_data(uint8_t lim_temps[NUM_LIMS]) {
 	for (uint8_t i = 0; i < NUM_THERM_TOTAL; i++) {
@@ -15,8 +16,12 @@ void get_lim_data(uint8_t lim_temps[NUM_LIMS]) {
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, (i >> 1) & 0x1);
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, (i >> 2) & 0x1);
 
+	    HAL_ADC_Start(&hadc3);
 		HAL_ADC_PollForConversion(&hadc3, 100);
 		uint16_t adc_data = HAL_ADC_GetValue(&hadc3);
+
+		printf("pin: %d, adc_data: %d \n", i, adc_data);
+
 
 		uint8_t avg_temp = (get_temp(adc_data) / NUM_THERM_PER_LIM);
 		lim_temps[i < 3 ? 0 : 1] += avg_temp;
