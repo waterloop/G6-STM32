@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "can.h"
 #include "i2c.h"
 #include "gpio.h"
@@ -27,6 +28,7 @@
 #include "can_driver.h"
 #include "config.h"
 #include "mpu6050.h"
+#include "lim.h"
 
 /* USER CODE END Includes */
 
@@ -92,6 +94,7 @@ int main(void)
   MX_GPIO_Init();
   MX_CAN3_Init();
   MX_I2C2_Init();
+  MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan3);
   MPU6050_Init(hi2c2);
@@ -102,8 +105,7 @@ int main(void)
   int8_t x_gyro = 0;
   int8_t y_gyro = 0;
   int8_t z_gyro = 0;
-  uint8_t lim_temp_1 = 0;
-  uint8_t lim_temp_2 = 0;
+  uint8_t lim_temps[NUM_LIMS];
   uint8_t error_code_1 = 0;
   uint8_t error_code_2 = 0;
 
@@ -123,12 +125,12 @@ int main(void)
 	  MPU6050_Read_Gyro(&x_gyro, &y_gyro, &z_gyro);
 
 	  //poll LIM thermistors
-	  //...
+	  get_lim_data(lim_temps);
 
 	  //Pack CAN messages
 	  CAN_set_segment(&tx_frame, PRESSURE, pressure);
-	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temp_1);
-	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temp_2);
+	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temps[0]);
+	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temps[1]);
 	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE_1, error_code_1);
 
 	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);
