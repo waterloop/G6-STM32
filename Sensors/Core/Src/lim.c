@@ -29,9 +29,11 @@ void get_lim_data(uint8_t lim_temps[NUM_LIMS]) {
 }
 
 uint8_t get_temp(uint16_t adc_value) {
-		uint32_t voltage_in = adc_value * (VOLTAGE_SUPPLY / MAX_ADC_COUNT);
-		uint32_t thermistor_resistance = voltage_in * R10K / (VOLTAGE_SUPPLY - voltage_in);
+		uint32_t voltage_in = adc_value * (MAX_VOLTAGE / MAX_ADC_COUNT);
+		uint32_t thermistor_resistance = (voltage_in * R10K) / (VOLTAGE_SUPPLY - voltage_in);
 
-		uint8_t temp_steinhart = -ABSOLUTE_ZERO + (1.0/((1.0/ (NOMINAL_TEMPERATURE + ABSOLUTE_ZERO)) + (log(thermistor_resistance / NOMINAL_RESISTANCE) / B_COEFFICIENT)));
+		uint8_t temp_steinhart = -ABSOLUTE_ZERO + (NOMINAL_TEMPERATURE * B_COEFFICIENT)/(NOMINAL_TEMPERATURE
+				                 * log(thermistor_resistance / R10K) + B_COEFFICIENT);
+
 		return temp_steinhart;
 }

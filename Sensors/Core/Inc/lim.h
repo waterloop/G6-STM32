@@ -18,11 +18,12 @@
 //Steinhart-Hart constants
 #define MAX_ADC_COUNT           4095U
 #define ABSOLUTE_ZERO           273.15
-#define NOMINAL_TEMPERATURE     25U
+#define NOMINAL_TEMPERATURE     298.15
 #define NOMINAL_RESISTANCE      10000U
 #define B_COEFFICIENT           3950U
 
-#define VOLTAGE_SUPPLY          5U
+#define VOLTAGE_SUPPLY          5
+#define MAX_VOLTAGE             3.3
 #define R10K                    10000U
 
 
