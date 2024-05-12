@@ -10,7 +10,15 @@
 
 //Converts volts to psi
 uint8_t volts2psi (volts){
-	uint8_t psi = (volts-0.00552)/0.00165;
+
+	uint8_t psi = 0;
+
+	if (volts <= 10){
+		psi = 0.0192;
+	}
+	else{
+		psi = (volts-0.00552)/0.00165;
+	}
 	return psi;
 }
 
