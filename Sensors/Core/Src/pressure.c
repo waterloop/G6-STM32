@@ -9,9 +9,9 @@
 #include "adc.h"
 
 //Converts volts to psi
-double volts2psi (volts){
-	double psi = (volts-0.00552)/0.00165;
-	return psi ;
+uint8_t volts2psi (volts){
+	uint8_t psi = (volts-0.00552)/0.00165;
+	return psi;
 }
 
 uint8_t poll_pressure_sensor(void){
