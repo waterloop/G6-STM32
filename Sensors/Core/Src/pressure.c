@@ -8,6 +8,20 @@
 #include "pressure.h"
 #include "adc.h"
 
+//Converts volts to psi
+uint8_t volts2psi (volts){
+
+	uint8_t psi = 0;
+
+	if (volts <= 10){
+		psi = 0.0192;
+	}
+	else{
+		psi = (volts-0.00552)/0.00165;
+	}
+	return psi;
+}
+
 uint8_t poll_pressure_sensor(void){
 	/*
 	 * I haven't used HAL_MAX_DELAY here because we will be polling
