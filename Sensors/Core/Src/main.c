@@ -107,7 +107,7 @@ int main(void)
   int8_t x_gyro = 0;
   int8_t y_gyro = 0;
   int8_t z_gyro = 0;
-  uint8_t lim_temps[NUM_LIMS];
+  uint8_t lim_temps[NUM_THERM_TOTAL];
   uint8_t error_code_1 = 0;
   uint8_t error_code_2 = 0;
 
@@ -131,8 +131,12 @@ int main(void)
 
 	  //Pack CAN messages
 	  CAN_set_segment(&tx_frame, PRESSURE, pressure);
-	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP, lim_temps[0]);
-	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP, lim_temps[1]);
+	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP_ONE, lim_temps[0]);
+	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP_TWO, lim_temps[1]);
+	  CAN_set_segment(&tx_frame, LIM_ONE_TEMP_THREE, lim_temps[2]);
+	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP_ONE, lim_temps[3]);
+	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP_TWO, lim_temps[4]);
+	  CAN_set_segment(&tx_frame, LIM_TWO_TEMP_THREE, lim_temps[5]);
 	  CAN_set_segment(&tx_frame, SENSORS_ERROR_CODE_1, error_code_1);
 
 	  CAN_set_segment(&imu_frame, X_ACCEL, x_accel);

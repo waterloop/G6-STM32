@@ -77,9 +77,13 @@ const Data_Segment_t BMS_ERROR_CODE            = {BMS_BOARD, 8, 8};
 
 // BEGIN SENSORS BOARD DEFS
 //FIRST FRAME
-const Data_Segment_t PRESSURE                  = {SENSOR_BOARD_1, 1, 2};
-const Data_Segment_t LIM_ONE_TEMP              = {SENSOR_BOARD_1, 3, 3};
-const Data_Segment_t LIM_TWO_TEMP              = {SENSOR_BOARD_1, 4, 4};
+const Data_Segment_t PRESSURE                  = {SENSOR_BOARD_1, 1, 1};
+const Data_Segment_t LIM_ONE_TEMP_ONE          = {SENSOR_BOARD_1, 2, 2};
+const Data_Segment_t LIM_ONE_TEMP_TWO          = {SENSOR_BOARD_1, 3, 3};
+const Data_Segment_t LIM_ONE_TEMP_THREE        = {SENSOR_BOARD_1, 4, 4};
+const Data_Segment_t LIM_TWO_TEMP_ONE          = {SENSOR_BOARD_1, 5, 5};
+const Data_Segment_t LIM_ONE_TEMP_TWO          = {SENSOR_BOARD_1, 6, 6};
+const Data_Segment_t LIM_TWO_TEMP_THREE        = {SENSOR_BOARD_1, 7, 7};
 const Data_Segment_t SENSORS_ERROR_CODE_1      = {SENSOR_BOARD_1, 8, 8};
 //SECOND (IMU) FRAME
 const Data_Segment_t X_ACCEL                   = {SENSOR_BOARD_2, 1, 2}; 
