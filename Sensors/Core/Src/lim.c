@@ -20,8 +20,7 @@ void get_lim_data(uint8_t lim_temps[NUM_LIMS]) {
 		HAL_ADC_PollForConversion(&hadc3, 100);
 		uint16_t adc_data = HAL_ADC_GetValue(&hadc3);
 
-		printf("pin: %d, adc_data: %d \n", i, adc_data);
-
+		printf("pin: %d, adc_val: %d, temp: %d \n", i, adc_data, get_temp(adc_data));
 
 		uint8_t avg_temp = (get_temp(adc_data) / NUM_THERM_PER_LIM);
 		lim_temps[i < 3 ? 0 : 1] += avg_temp;
@@ -29,12 +28,11 @@ void get_lim_data(uint8_t lim_temps[NUM_LIMS]) {
 }
 
 uint8_t get_temp(uint16_t adc_value) {
-		//Convert the ADC value being read into a resistance.
-		uint32_t voltage_in = adc_value * (VOLTAGE_SUPPLY / MAX_ADC_COUNT);
-		uint32_t thermistor_resistance = voltage_in * R10K / (VOLTAGE_SUPPLY - voltage_in);
+		float voltage_in = adc_value * (MAX_VOLTAGE / MAX_ADC_COUNT);
+		float thermistor_resistance = (voltage_in * R10K) / (VOLTAGE_SUPPLY - voltage_in);
 
-		//Calculates Temperature from Resistance of thermistor using the Simplified B parameter Steinhart Equation.
-		//1/Temp = 1/NominalTemp + (1/B)*1n(Thermistor Resistance/NominalResistance)
-		uint8_t temp_steinhart = -ABSOLUTE_ZERO + (1.0/((1.0/ (NOMINAL_TEMPERATURE + ABSOLUTE_ZERO)) + (log(thermistor_resistance / NOMINAL_RESISTANCE) / B_COEFFICIENT)));
+		uint8_t temp_steinhart = -ABSOLUTE_ZERO + (NOMINAL_TEMPERATURE * B_COEFFICIENT)/(NOMINAL_TEMPERATURE
+				                 * log(thermistor_resistance / R10K) + B_COEFFICIENT);
+
 		return temp_steinhart;
 }
