@@ -26,11 +26,7 @@
 // FRAME 1
 const Data_Segment_t DRIVING_DIRECTION_K       = {MOTOR_CONTROLLER_K1, 1, 1};
 const Data_Segment_t MOTOR_SPEED_K             = {MOTOR_CONTROLLER_K1, 2, 3};
-<<<<<<< HEAD
 const Data_Segment_t MOTOR_ERROR_CODE_K        = {MOTOR_CONTROLLER_K1, 4, 4};
-=======
-const Data_Segment_t MOTOR_ERROR_CODE_K        = {MOTOR_CONTROLLER_K1, 4, 4}; 
->>>>>>> bd43edd (Added IMU message to config)
 // FRAME 2
 const Data_Segment_t BATTERY_VOLTAGE_K         = {MOTOR_CONTROLLER_K2, 1, 2};
 const Data_Segment_t BATTERY_CURRENT_K         = {MOTOR_CONTROLLER_K2, 3, 4};
