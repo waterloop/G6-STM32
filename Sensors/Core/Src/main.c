@@ -117,7 +117,7 @@ int main(void)
   while (1)
   {
 	  //poll pressure sensor
-	  pressure = poll_Pressure_Sensor();
+	  pressure = poll_pressure_sensor();
 
 	  //poll IMU
 	  MPU6050_Read_Accel(&x_accel, &y_accel);
