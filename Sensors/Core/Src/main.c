@@ -20,6 +20,7 @@
 #include "main.h"
 #include "can.h"
 #include "i2c.h"
+#include "adc.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -27,7 +28,7 @@
 #include "can_driver.h"
 #include "config.h"
 #include "mpu6050.h"
-
+#include "pressure.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -116,7 +117,7 @@ int main(void)
   while (1)
   {
 	  //poll pressure sensor
-	  //...
+	  pressure = poll_pressure_sensor();
 
 	  //poll IMU
 	  MPU6050_Read_Accel(&x_accel, &y_accel);
