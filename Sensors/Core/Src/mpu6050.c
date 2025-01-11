@@ -34,11 +34,11 @@ void MPU6050_Read_Gyro(int8_t* x_gyro, int8_t* y_gyro, int8_t* z_gyro){
 	HAL_I2C_Mem_Read(&i2c_handler, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, rec_data, 6, TIMEOUT);
 
 	int16_t gyro_x_raw = (int16_t)(rec_data[0] << 8 | rec_data[1]);
-	*x_gyro = (int16_t)(gyro_x_raw * LSB_TO_RAD_S); // the value never goes above 256
+	*x_gyro = (int16_t)(gyro_x_raw * LSB_TO_RAD_S) >> 8;
 
 	int16_t gyro_y_raw = (int16_t)(rec_data[2] << 8 | rec_data[3]);
-	*y_gyro = (int16_t)(gyro_y_raw * LSB_TO_RAD_S);
+	*y_gyro = (int16_t)(gyro_y_raw * LSB_TO_RAD_S) >> 8;
 
 	int16_t gyro_z_raw = (int16_t)(rec_data[4] << 8 | rec_data[5]);
-	*z_gyro = (int16_t)(gyro_z_raw * LSB_TO_RAD_S);
+	*z_gyro = (int16_t)(gyro_z_raw * LSB_TO_RAD_S) >> 8;
 }
