@@ -2,7 +2,7 @@
  * dac.c
  *
  *  Created on: Feb 6, 2024
- *      Author: Mostafa Hussein
+ *      Author: Mostafa Hussein, Mahir Mahota
  */
 
 #include "dac.h"
